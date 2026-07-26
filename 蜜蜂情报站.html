@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐝 蜜蜂情报站</title>
+<style>
+:root {
+  --bg: #f5f6f8;
+  --card-bg: #fff;
+  --text: #1a1a2e;
+  --text-secondary: #6b7280;
+  --text-light: #9ca3af;
+  --border: #e5e7eb;
+  --accent: #4f46e5;
+  --accent-light: #eef2ff;
+  --green: #059669;
+  --green-light: #d1fae5;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+.header {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #fff;
+  padding: 28px 24px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-inner { max-width: 1100px; margin: 0 auto; }
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-icon {
+  width: 40px; height: 40px;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.logo-text { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+.logo-sub { font-size: 12px; color: rgba(255,255,255,0.55); font-weight: 400; }
+.header-date { text-align: right; }
+.date-main { font-size: 14px; font-weight: 600; }
+.date-sub { font-size: 11px; color: rgba(255,255,255,0.55); }
+
+/* Mode tabs */
+.mode-nav {
+  display: flex;
+  gap: 4px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 4px;
+}
+.mode-btn {
+  flex: 1;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.55);
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.25s;
+  white-space: nowrap;
+}
+.mode-btn:hover { color: rgba(255,255,255,0.85); }
+.mode-btn.active { background: #fff; color: var(--accent); box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+
+.main { max-width: 1100px; margin: 0 auto; padding: 20px 24px 48px; }
+.mode-content { display: none; }
+.mode-content.active { display: block; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ====== Knowledge Base Mode ====== */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  text-align: center;
+  transition: all 0.2s;
+}
+.stat-card:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(79,70,229,0.08); }
+.stat-number { font-size: 26px; font-weight: 700; color: var(--accent); line-height: 1.2; }
+.stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+.cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.cat-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.25s;
+  user-select: none;
+}
+.cat-card:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(79,70,229,0.1); transform: translateY(-1px); }
+.cat-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+.cat-icon {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.cat-icon-bg-ecommerce { background: #fef3c7; }
+.cat-icon-bg-retail { background: #e0f2fe; }
+.cat-icon-bg-ai { background: #ede9fe; }
+.cat-icon-bg-business { background: #d1fae5; }
+.cat-icon-bg-data { background: #fce7f3; }
+.cat-name { font-size: 16px; font-weight: 700; }
+.cat-count { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+.cat-desc { font-size: 12px; color: var(--text-light); line-height: 1.5; margin-bottom: 10px; padding-left: 52px; }
+.cat-tags { display: flex; gap: 4px; flex-wrap: wrap; padding-left: 52px; }
+.cat-tag { font-size: 10px; padding: 2px 10px; border-radius: 10px; background: var(--accent-light); color: var(--accent); font-weight: 500; }
+
+.cat-items {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+  opacity: 0;
+  margin-top: 0;
+}
+.cat-card.expanded .cat-items { max-height: 2000px; opacity: 1; margin-top: 14px; }
+.cat-card.expanded { border-color: var(--accent); background: #fafbff; }
+
+.kb-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.kb-item:last-child { border-bottom: none; }
+.kb-item-info { flex: 1; min-width: 0; }
+.kb-item-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  line-height: 1.5;
+  transition: color 0.15s;
+}
+.kb-item-title:hover { color: var(--accent); text-decoration: underline; }
+.kb-item-meta { font-size: 11px; color: var(--text-light); margin-top: 3px; }
+.kb-item-link {
+  font-size: 11px;
+  color: var(--accent);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 3px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.kb-item-link:hover { background: var(--accent-light); }
+
+/* ====== Dashboard Mode ====== */
+.date-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 12px 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.date-arrow {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  color: var(--text-secondary);
+}
+.date-arrow:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+.date-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+.date-display { font-size: 18px; font-weight: 700; min-width: 130px; text-align: center; }
+.date-weekday { font-size: 13px; color: var(--text-secondary); font-weight: 400; }
+.date-dot-wrap { display: flex; gap: 6px; align-items: center; }
+.date-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.2s; }
+.date-dot.has-data { background: var(--accent); box-shadow: 0 0 4px rgba(79,70,229,0.4); }
+.date-dot.active { background: var(--accent); transform: scale(1.3); }
+
+.dash-tabs {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  margin-bottom: 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+}
+.dash-tab {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.dash-tab:hover { color: var(--text); background: var(--bg); }
+.dash-tab.active { background: var(--accent); color: #fff; }
+.dash-tab-count {
+  display: inline-block;
+  background: rgba(0,0,0,0.08);
+  border-radius: 8px;
+  padding: 0 6px;
+  font-size: 10px;
+  margin-left: 4px;
+  line-height: 18px;
+}
+.dash-tab.active .dash-tab-count { background: rgba(255,255,255,0.2); }
+
+.dash-content { display: none; }
+.dash-content.active { display: block; }
+
+.card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+.card:hover { border-color: var(--accent); box-shadow: 0 2px 12px rgba(79,70,229,0.08); }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 6px; }
+.card-title { font-size: 15px; font-weight: 600; color: var(--text); text-decoration: none; line-height: 1.5; transition: color 0.15s; }
+.card-title:hover { color: var(--accent); text-decoration: underline; }
+.card-source { font-size: 12px; color: var(--text-light); margin-top: 3px; }
+.card-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 8px; }
+.card-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.card-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.tag { font-size: 10px; padding: 2px 10px; border-radius: 10px; font-weight: 500; }
+.tag-ecommerce { background: #fef3c7; color: #92400e; }
+.tag-retail { background: #e0f2fe; color: #075985; }
+.tag-ai { background: #ede9fe; color: #5b21b6; }
+.tag-business { background: #d1fae5; color: #065f46; }
+.tag-data { background: #fce7f3; color: #9d174d; }
+.card-link-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; color: var(--accent); text-decoration: none; font-weight: 500;
+  padding: 3px 10px; border-radius: 6px; border: 1px solid var(--accent);
+  transition: all 0.15s; white-space: nowrap;
+}
+.card-link-btn:hover { background: var(--accent-light); }
+
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+.empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.35; }
+.empty-text { font-size: 15px; }
+
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.status-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--accent-light); color: var(--accent);
+  padding: 3px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;
+}
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); display: inline-block; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.footer { text-align: center; padding: 24px; color: var(--text-light); font-size: 12px; border-top: 1px solid var(--border); }
+
+/* ── KB search bar ── */
+.kb-search { margin-bottom: 16px; position: relative; }
+.kb-search-input {
+  width: 100%; padding: 12px 16px 12px 42px;
+  border: 1px solid var(--border); border-radius: 10px;
+  font-size: 14px; background: var(--card-bg); color: var(--text);
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.kb-search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(79,70,229,0.1); }
+.kb-search-input::placeholder { color: var(--text-light); }
+.kb-search-icon {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 16px; color: var(--text-light); pointer-events: none;
+}
+.kb-search-clear {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--text-light);
+  cursor: pointer; font-size: 18px; padding: 4px 8px; display: none; line-height: 1;
+}
+.kb-search-clear.visible { display: block; }
+.kb-search-clear:hover { color: var(--text); }
+
+/* ── Date group within KB ── */
+.date-group { margin: 4px 0; }
+.date-group-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 10px; cursor: pointer; border-radius: 8px;
+  transition: background 0.15s; font-size: 13px; user-select: none;
+}
+.date-group-header:hover { background: var(--bg); }
+.date-group-arrow { font-size: 9px; color: var(--text-light); width: 12px; text-align: center; transition: transform 0.2s; }
+.date-group-label { font-weight: 600; color: var(--text-secondary); }
+.date-group-count { font-size: 11px; color: var(--text-light); margin-left: auto; }
+.date-group-items { padding-left: 0; }
+.date-group-items .kb-item:last-child { border-bottom: none; }
+
+@media (max-width: 640px) {
+  .header { padding: 20px 16px 0; }
+  .header-top { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .header-date { text-align: left; }
+  .mode-btn { padding: 8px 14px; font-size: 13px; }
+  .main { padding: 16px 16px 32px; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .cat-grid { grid-template-columns: 1fr; }
+  .date-nav { flex-wrap: wrap; }
+  .card-header { flex-direction: column; }
+  .card-footer { flex-direction: column; align-items: flex-start; }
+  .dash-tabs { padding: 2px; }
+  .dash-tab { padding: 6px 10px; font-size: 12px; }
+}
+/* ── Talk Daily mode ── */
+.talk-section { margin-bottom: 24px; }
+.talk-section-title { font-size: 17px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+.talk-headline-card {
+  background: linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%);
+  border: 1px solid #fcd34d;
+  border-radius: 14px; padding: 20px 24px;
+  margin-bottom: 14px;
+}
+.talk-headline-title { font-size: 18px; font-weight: 700; color: #92400e; margin-bottom: 4px; }
+.talk-headline-source { font-size: 11px; color: #b45309; margin-bottom: 10px; }
+.talk-headline-oneliner { font-size: 14px; color: #78350f; background: rgba(255,255,255,0.6); padding: 10px 14px; border-radius: 8px; margin-bottom: 12px; line-height: 1.6; }
+.talk-scene-tabs { display: flex; gap: 4px; margin-bottom: 10px; flex-wrap: wrap; }
+.talk-scene-tab {
+  padding: 6px 14px; font-size: 12px; font-weight: 600;
+  background: rgba(255,255,255,0.5); border: 1px solid #fde68a;
+  border-radius: 8px; cursor: pointer; transition: all 0.15s;
+  color: #92400e; white-space: nowrap;
+}
+.talk-scene-tab:hover { background: rgba(255,255,255,0.8); }
+.talk-scene-tab.active { background: #fff; border-color: #f59e0b; box-shadow: 0 1px 4px rgba(245,158,11,0.2); }
+.talk-scene-content {
+  font-size: 14px; color: var(--text); line-height: 1.7;
+  background: rgba(255,255,255,0.6); padding: 12px 16px; border-radius: 8px;
+  min-height: 40px;
+}
+.talk-scene-panel { display: none; }
+.talk-scene-panel.active { display: block; }
+.talk-bestfor { margin-top: 8px; font-size: 12px; color: #92400e; background: rgba(255,255,255,0.5); padding: 6px 12px; border-radius: 6px; display: inline-block; }
+.talk-table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--card-bg); border-radius: 10px; overflow: hidden; border: 1px solid var(--border); }
+.talk-table th { background: var(--bg); font-weight: 600; color: var(--text-secondary); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 12px; }
+.talk-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.talk-table tr:last-child td { border-bottom: none; }
+.talk-table tr:hover td { background: var(--accent-light); }
+.talk-objection-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 10px; transition: all 0.2s; }
+.talk-objection-card:hover { border-color: var(--accent); box-shadow: 0 2px 12px rgba(79,70,229,0.08); }
+.talk-obj-customer { font-size: 13px; font-weight: 600; color: #dc2626; margin-bottom: 6px; }
+.talk-obj-customer::before { content: "😤 客户说："; font-weight: 700; }
+.talk-obj-reply { font-size: 13px; color: var(--text); line-height: 1.7; margin-bottom: 6px; }
+.talk-obj-reply::before { content: "💬 你可以回："; font-weight: 700; color: var(--accent); }
+.talk-obj-source { font-size: 11px; color: var(--text-light); }
+.talk-obj-source::before { content: "📎 依据："; }
+.talk-radar-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.talk-radar-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; transition: all 0.2s; }
+.talk-radar-card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.talk-radar-indicator { font-size: 11px; color: var(--text-light); margin-bottom: 2px; }
+.talk-radar-value { font-size: 20px; font-weight: 700; color: var(--text); }
+.talk-radar-direction { font-size: 11px; margin-left: 4px; }
+.talk-radar-direction.up { color: #dc2626; }
+.talk-radar-direction.down { color: #059669; }
+.talk-radar-direction.flat { color: #f59e0b; }
+.talk-radar-note { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+.talk-radar-source { font-size: 10px; color: var(--text-light); margin-top: 4px; }
+.talk-empty { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+.talk-empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.35; }
+.talk-empty-text { font-size: 15px; }
+@media (max-width: 640px) {
+  .talk-radar-grid { grid-template-columns: repeat(2, 1fr); }
+  .talk-headline-card { padding: 14px 16px; }
+  .talk-table { font-size: 12px; }
+  .talk-table th,
+  .talk-table td { padding: 8px 10px; }
+}
+/* ── Daily Report (深度日报) ── */
+.dr-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 12px 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.dr-date-display { font-size: 18px; font-weight: 700; min-width: 150px; text-align: center; }
+.dr-article {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px 36px;
+  line-height: 1.8;
+  color: var(--text);
+  font-size: 15px;
+}
+.dr-article h1.dr-h1 { font-size: 26px; font-weight: 800; margin-bottom: 4px; color: var(--text); }
+.dr-article .dr-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; }
+.dr-article hr.dr-hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+.dr-article h2.dr-h2 { font-size: 20px; font-weight: 700; margin: 28px 0 12px; padding-bottom: 8px; border-bottom: 2px solid var(--accent-light); }
+.dr-article h3.dr-h3 { font-size: 17px; font-weight: 700; margin: 20px 0 8px; color: var(--accent); }
+.dr-article p.dr-p { margin-bottom: 14px; text-align: justify; }
+.dr-article strong { color: var(--text); }
+.dr-article blockquote.dr-blockquote {
+  margin: 16px 0;
+  padding: 14px 20px;
+  background: var(--accent-light);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+.dr-article blockquote.dr-blockquote p { margin-bottom: 0; }
+.dr-article ul.dr-ul { margin: 12px 0; padding-left: 24px; }
+.dr-article ul.dr-ul li { margin-bottom: 6px; list-style: disc; }
+.dr-article ol.dr-ol { margin: 12px 0; padding-left: 24px; }
+.dr-article ol.dr-ol li { margin-bottom: 6px; list-style: decimal; }
+.dr-article .dr-framebox {
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+.dr-article .dr-framebox-title { font-size: 14px; font-weight: 700; color: #166534; margin-bottom: 8px; }
+.dr-article .dr-table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 10px; border: 1px solid var(--border); }
+.dr-article table.dr-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.dr-article table.dr-table th { background: var(--bg); font-weight: 600; color: var(--text-secondary); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; }
+.dr-article table.dr-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+.dr-article table.dr-table tr:last-child td { border-bottom: none; }
+.dr-article .dr-footnote { font-size: 12px; color: var(--text-light); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+@media (max-width: 640px) {
+  .dr-article { padding: 20px 18px; font-size: 14px; }
+  .dr-article h1.dr-h1 { font-size: 22px; }
+  .dr-article h2.dr-h2 { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-icon">🐝</div>
+        <div>
+          <div class="logo-text">蜜蜂情报站</div>
+          <div class="logo-sub">全网信息采集与知识沉淀系统</div>
+        </div>
+      </div>
+      <div class="header-date">
+        <div class="date-main" id="todayDisplay">加载中...</div>
+        <div class="date-sub" id="weekdayDisplay"></div>
+      </div>
+    </div>
+    <nav class="mode-nav">
+      <button class="mode-btn active" data-mode="knowledge">📚 知识库</button>
+      <button class="mode-btn" data-mode="dashboard">📋 每日看板</button>
+      <button class="mode-btn" data-mode="talk">📋 深度日报</button>
+    </nav>
+  </div>
+</header>
+
+<main class="main">
+
+  <!-- ====== KNOWLEDGE BASE ====== -->
+  <div class="mode-content active" id="mode-knowledge">
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-number" id="statCategories">5</div>
+        <div class="stat-label">分类板块</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statItems">0</div>
+        <div class="stat-label">已沉淀条目</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statSources">0</div>
+        <div class="stat-label">信息来源</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statUpdated">-</div>
+        <div class="stat-label">最后更新</div>
+      </div>
+    </div>
+    <div class="kb-search">
+      <span class="kb-search-icon">🔍</span>
+      <input class="kb-search-input" id="kbSearch" type="text" placeholder="搜索标题、描述、来源、标签…">
+      <button class="kb-search-clear" id="kbSearchClear">✕</button>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+    <div style="text-align:center;margin-top:20px;font-size:12px;color:var(--text-light);">
+      💡 点击分类卡片展开 · 按月分组查看 · 搜索全库内容 · 标题可跳转原文
+    </div>
+  </div>
+
+  <!-- ====== DASHBOARD ====== -->
+  <div class="mode-content" id="mode-dashboard">
+    <div class="date-nav">
+      <button class="date-arrow" id="datePrev" title="前一日">◀</button>
+      <div class="date-display">
+        <span id="dashDate">----</span>
+        <div class="date-weekday" id="dashWeekday"></div>
+      </div>
+      <button class="date-arrow" id="dateNext" title="后一日">▶</button>
+      <div class="date-dot-wrap" id="dateDots"></div>
+    </div>
+    <div class="status-bar">
+      <div class="status-left">
+        <span class="status-badge"><span class="status-dot"></span> <span id="dashStatus">实时情报</span></span>
+      </div>
+      <span>共 <strong id="dashTotal">0</strong> 条情报 · 覆盖 <strong id="dashSources">0</strong> 个来源</span>
+    </div>
+    <nav class="dash-tabs" id="dashTabs">
+      <button class="dash-tab active" data-dtab="all">📋 全部 <span class="dash-tab-count" id="dcount-all">0</span></button>
+      <button class="dash-tab" data-dtab="ecommerce">📦 电商 <span class="dash-tab-count" id="dcount-ecommerce">0</span></button>
+      <button class="dash-tab" data-dtab="retail">🏪 实体 <span class="dash-tab-count" id="dcount-retail">0</span></button>
+      <button class="dash-tab" data-dtab="ai">🤖 AI与软件 <span class="dash-tab-count" id="dcount-ai">0</span></button>
+      <button class="dash-tab" data-dtab="business">💼 生意与销售 <span class="dash-tab-count" id="dcount-business">0</span></button>
+      <button class="dash-tab" data-dtab="data">📊 数据报告 <span class="dash-tab-count" id="dcount-data">0</span></button>
+    </nav>
+    <div class="dash-content active" id="dtab-all"></div>
+    <div class="dash-content" id="dtab-ecommerce"></div>
+    <div class="dash-content" id="dtab-retail"></div>
+    <div class="dash-content" id="dtab-ai"></div>
+    <div class="dash-content" id="dtab-business"></div>
+    <div class="dash-content" id="dtab-data"></div>
+  </div>
+
+  <!-- ====== DAILY REPORT (深度日报) ====== -->
+  <div class="mode-content" id="mode-talk">
+    <div class="dr-nav">
+      <button class="date-arrow" id="drPrev" title="前一日">◀</button>
+      <div class="dr-date-display">
+        <span id="drDate">----</span>
+        <div class="date-weekday" id="drWeekday"></div>
+      </div>
+      <button class="date-arrow" id="drNext" title="后一日">▶</button>
+    </div>
+    <div id="dr-content"></div>
+    <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-light);">
+      💡 深度日报基于当日采集情报综合撰写 · 帮助理解行业趋势与销售洞察
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">🐝 蜜蜂情报站 · 数据来源包括公开媒体及联网搜索 · 仅供内部参考</footer>
+
+<script>
+/* ==========================================================
+   DATA — 所有情报数据，按日期组织
+   后续每次采集只需在对应日期下追加条目
+   ========================================================== */
+const ALL_DATA = {
+  "2026-07-25": [
+    {id:26, c:"ecommerce", t:"上半年电商成绩单：网上商品零售额增长4.8%，智能商品爆发式增长", s:"商务部/人民网", d:"2026-07-24", desc:"商务部发布上半年电商发展报告：全国网上商品零售额64,296亿元增长4.8%。智能外骨骼+458.4%，智能眼镜+151.7%。农产品+12.2%。服务零售额+6%，旅游+27.2%。", tags:["电商半年报","智能商品","消费数据"], l:"https://finance.people.com.cn/n1/2026/0725/c1004-40767828.html"},
+    {id:27, c:"ecommerce", t:"AI购物元年开启：千问×淘宝打通、京东Agent接入元宝、豆包嵌入抖音", s:"综合报道", d:"2026-07-25", desc:"2026年被公认为AI购物元年。阿里千问与淘宝全面打通上线AI帮我挑；京东AI Agent接入腾讯元宝实现边聊边买；字节豆包嵌入抖音上线买前问豆包。AI对话取代搜索成新购物入口。", tags:["AI购物","入口之战","三大阵营"], l:"https://finance.eastmoney.com/a/202607163809382310.html"},
+    {id:28, c:"ecommerce", t:"京麦AI经营中心上线：京东向商家全量开放22款AI工具", s:"电商网/DoNews", d:"2026-07-25", desc:"京东正式推出京麦AI经营中心，向商家全量开放22款核心AI工具，覆盖超百项日常经营场景，包括每日AI诊断报告、AI超级助手等模块，通过多Agent协作实现全链路智能经营。", tags:["京东","AI工具","商家经营"], l:"http://www.100ec.cn/detail--6661472.html"},
+    {id:29, c:"retail", t:"九部门发文力撑零售业：20条新政布局2030年现代零售体系", s:"央视/商务部", d:"2026-07-25", desc:"商务部等9部门联合印发《关于加快零售业创新发展的意见》，提出20条政策措施。首次明确线上线下零售一视同仁，支持即时零售、自有品牌、零售跨界融合等新业态。", tags:["零售新政","20条","线上线下","政策"], l:"https://t.cj.sina.com.cn/articles/view/2258727970/m86a1742203302glew"},
+    {id:30, c:"retail", t:"零售中报冷暖分化：永辉扭亏、红旗筑墙、中百失血", s:"证券时报/东方财富", d:"2026-07-24", desc:"A股零售板块中报分化：永辉扭亏（净利2.5亿），已完成331家胖东来式调改；红旗连锁扣非净利+8%；中百续亏2.5-3.3亿。门店调改+供应链优化是胜负手。", tags:["零售中报","永辉","分化","门店调改"], l:"https://www.stcn.com/article/detail/4038676.html"},
+    {id:31, c:"retail", t:"胖东来经验获商务部点赞：上半年销售额145亿同比增24%", s:"商务部/网易", d:"2026-07-25", desc:"商务部点赞胖东来为行业标杆：上半年销售额145亿元同比增24%，稳定吸纳就业超1.9万人。许昌社零增速连续29个月领先全省。新政中去皮称重、无理由退货等措施借鉴胖东来。", tags:["胖东来","零售标杆","商务部点赞","145亿"], l:"https://www.163.com/dy/article/L1IBDFSC0514DG98.html"},
+    {id:32, c:"ai", t:"7款手机端侧大模型过审：苹果智能、华为小艺、小米澎湃AI等获批", s:"新京报", d:"2026-07-25", desc:"国家网信办公示7款手机端侧生成式AI服务备案，包括苹果智能、华为小艺、OPPO AndesGPT、vivo蓝心大模型等。端侧AI正式进入合规规模化普及阶段。阿里千问将集成至苹果智能。", tags:["端侧AI","手机大模型","苹果智能","备案"], l:"https://m.bjnews.com.cn/detail/1784187458129497.html"},
+    {id:33, c:"ai", t:"Gartner：2340亿美元企业应用软件支出面临AI智能体冲击", s:"Gartner/C114", d:"2026-07-25", desc:"Gartner重磅报告：到2030年2340亿美元企业应用软件支出约20%将受智能体套利冲击。AI智能体可跨系统完成任务，降低对传统软件界面的需求，打破用户增长与营收的绑定。", tags:["Gartner","2340亿","AI冲击","SaaS"], l:"https://www.c114.com.cn/news/16/a1313402.html"},
+    {id:34, c:"ai", t:"淘宝ShopX电商大模型发布：让AI直接进商品空间卖货", s:"BAAI/综合", d:"2026-07-25", desc:"淘宝发布面向Agentic Shopping的电商大模型ShopX，让大模型直接进入商品空间进行规划、检索、排序和组合。用户说出片穿搭等自然语言，AI即可理解并完成商品推荐组合。", tags:["ShopX","电商大模型","Agentic Shopping","淘宝"], l:"https://hub.baai.ac.cn/view/56303"},
+    {id:35, c:"business", t:"SaaS商业模式大重构：从按席位付费转向按结果付费", s:"36氪/WAIC论坛", d:"2026-07-25", desc:"WAIC上阿里云CTO明确SaaS将迁移到智能体服务模式。Salesforce推pay-per-resolution每次2美元；迈富时场景Token净利预增近500%；美国小企业退订Salesforce用AI自建。", tags:["SaaS商业模式","按结果付费","Salesforce","AI冲击"], l:"https://36kr.com/p/3907431491736964"},
+    {id:36, c:"business", t:"美国小企业掀Salesforce退订潮：用AI自建软件年省数十万", s:"36氪", d:"2026-07-25", desc:"多家20-70人美国企业借助Anthropic/Replit自建CRM/ERP替代Salesforce，年省数万至数十万。Salesforce 2026年股价跌约30%，传统席位模式增长触顶。", tags:["Salesforce","退订潮","AI自建","SaaS解构"], l:"https://36kr.com/p/3907431491736964"},
+    {id:37, c:"data", t:"商务部电商半年报：上半年社零248,722亿，网上零售破10万亿", s:"商务部/21世纪", d:"2026-07-25", desc:"上半年社零248,722亿元同比增1.3%。网上商品和服务零售额100,715亿元增5.2%，线上渗透率达40.4%。智能外骨骼+458%，智能眼镜+152%，旅游+27.2%，餐饮+13.9%。", tags:["社零数据","电商半年报","智能消费","渗透率"], l:"https://m.21jingji.com/article/20260715/herald/447887b43f3de4d266ac4398c9975ed6.html"},
+    {id:38, c:"data", t:"中国直播电商市场9000亿美元：接近整个美国电商规模", s:"NielsenIQ报告", d:"2026-07-25", desc:"NIQ报告显示中国直播电商2025年约9000亿美元，接近美国电商总规模。亚太占全球55%。中国社交电商预计2030年达1.8万亿美元。北美68%/欧洲67%消费者从未通过社交购物。", tags:["直播电商","9000亿美元","NIQ","全球对比"], l:"https://nielseniq.com/global/en/news-center/2026/chinas-900b-live-commerce-market-now-approaches-us-e-commerce-scale/"},
+    {id:39, c:"data", t:"上半年线上消费对社零增长贡献率达88.3%", s:"中财网/券商研报", d:"2026-07-25", desc:"1-5月线上消费对社零增长贡献率高达88.3%。服务消费增速6%显著高于商品。以旧换新政策带动1.1万亿惠及1.5亿人次。线上消费从边际渠道升级为主增长引擎。", tags:["消费贡献率","以旧换新","线上渗透","经济数据"], l:"https://wt.cfi.cn/p20260710000308.html"}
+  ],
+  "2026-07-24": [
+    {id:1, c:"ecommerce", t:"2026年618复盘：全网GMV 9340亿，AI全面渗透成最大变量", s:"综合多家媒体", d:"2026-06-20", desc:"618全网总GMV 9340亿元（同比+4%）。AI深度嵌入电商全链路：京东数字人直播服务超8万商家，日均开播增长5倍；AI营销全托管商家订单增速高于大盘10个百分点。平台竞争从价格驱动转向效率与体验驱动。", tags:["618","AI电商","平台竞争"], l:"https://36kr.com/p/3835998714016904"},
+    {id:2, c:"ecommerce", t:"9部门发文整治平台内卷：禁止算法唯价格论、强制商家承担补贴", s:"东方财富", d:"2026-07-09", desc:"商务部等9部门发文，要求平台不得仅以商品价格作为算法推荐核心参数，禁止平台强制商家承担补贴或参与促销活动。首次从政策层面系统性整治平台低价内卷。", tags:["政策","平台监管","反内卷"], l:"https://finance.eastmoney.com/a/202607093799958994.html"},
+    {id:3, c:"ecommerce", t:"京东成立生态联盟：38家品牌闭门会议，商家从参与者升级为规则共建者", s:"网易", d:"2026-07-22", desc:"京东举办首届共创峰会，与38家头部品牌闭门会议，收集80余项核心诉求并建档跟进。站外种草获客成本首度低于商家自主投放、上线AI数字员工京麦AI、推出恶意用户跨店联防机制。", tags:["京东","平台生态","商家关系"], l:"https://www.163.com/dy/article/L10SBBMH05568W0A.html"},
+    {id:4, c:"ecommerce", t:"服装直播退货率飙至80%：年GMV 1亿，有效仅3000万", s:"21世纪经济报道", d:"2026-06-29", desc:"纯直播女装退货率70-80%，1亿GMV有效仅约3000万。货架+直播模式退货率可控制在20-30%。全球电商退货金额预计突破8000亿美元。退货率超15%且毛利率低于30%的品类基本白干。", tags:["退货率","服装","直播电商","经营数据"], l:"https://m.21jingji.com/article/20260629/herald/b2d57a66767ca698c903ce6ffd8f1fd0.html"},
+    {id:5, c:"ecommerce", t:"欧盟关税新政冲击跨境电商：Temu流量腰斩，SHEIN几乎退出广告竞价", s:"亿邦动力", d:"2026-07-22", desc:"欧盟7月1日起对150欧以下包裹每件增收3欧元。Temu在Google Shopping广告曝光下降约一半，SHEIN几乎退出。速卖通被罚5.5亿欧元。跨境电商跑量红利时代正式落幕。", tags:["跨境电商","欧盟","Temu","政策"], l:"https://m.ebrun.com/686664.html"},
+    {id:6, c:"ecommerce", t:"商家投诉数据报告：拼多多36%、抖音34%，仅退款仍是核心矛盾", s:"网经社", d:"2026-07-10", desc:"2026上半年商家投诉集中在拼多多（36.35%）和抖音电商（34.00%）。主要问题：任意仅退款（31.92%）、任意罚款（23.69%）、过度维护消费者（14.38%）。", tags:["平台矛盾","商家生态","仅退款"], l:"https://100ec.cn/detail--6661288.html"},
+    {id:7, c:"ecommerce", t:"行业七高之痛：商家集体从GMV转向利润导向", s:"搜狐/中国营销传播网", d:"2026-07-15", desc:"商家普遍面临高退货率、高流量成本、高推广费比、高平台扣点、高运费险、高库存积压、高合规风险。超三成亏损，另三成微利。丸美董事长：亏损业务坚决不做。", tags:["商家生存","利润导向","经营困境"], l:"https://www.sohu.com/a/1046435758_100116740"},
+    {id:8, c:"ecommerce", t:"亚马逊推标杆新卖家孵化计划：目标2029年培育2000个破亿品牌", s:"中华网", d:"2026-07-22", desc:"亚马逊发布标杆新卖家孵化计划，为符合资格企业配备专属品类专家，提供最高75万美元资源支持。推动中国卖家从铺货模式转向品牌化经营。", tags:["亚马逊","品牌化","跨境电商"], l:"https://finance.china.com/TMT/13004688/20260722/49627220.html"},
+    {id:25, c:"ecommerce", t:"淘宝闪购500亿补贴计划：AI营销全托管让商家订单增速高10个百分点", s:"综合报道", d:"2026-07-15", desc:"淘宝推出500亿元专项补贴计划，扶持逻辑从单一资金补贴升级为全方位能力赋能。入驻Agent将开店审核压缩至5分钟，AI营销全托管使用商家订单增速高于大盘10个百分点。", tags:["淘宝","AI营销","补贴计划"], l:"https://www.sohu.com/a/1053614525_161795"},
+    {id:9, c:"retail", t:"便利店进化论：智能化升级+全渠道融合，线上订单成为第二曲线", s:"央广网", d:"2026-05-29", desc:"便利店行业全面加速智能化：AI选品优化商品组合、AI导购实现个性化推荐、云值守技术降低65-70%人工成本。线上订单成为便利店增长第二曲线，即时零售推动30分钟达成为标配。", tags:["便利店","数字化","即时零售"], l:"https://finance.cnr.cn/txcj/20260529/t20260529_527640719.shtml"},
+    {id:10, c:"retail", t:"连锁产业拐点已至：53%品牌门店收缩，系统致胜取代单点突破", s:"新京报", d:"2026-07-10", desc:"逸马发布《中国连锁产业年度趋势白皮书2026》：53%品牌陷入门店收缩或停滞。连锁企业从连而不锁转向系统致胜：加盟费逻辑→供应链溢价、性价比→心价比、遍地开花→区域绝对领先。", tags:["连锁产业","系统致胜","拐点"], l:"https://m.bjnews.com.cn/detail/1772689375129327.html"},
+    {id:11, c:"retail", t:"即时零售规模突破1万亿元：30分钟达从可选项跃升为刚需", s:"人民网", d:"2026-07-16", desc:"2026年即时零售规模将突破1万亿元，预计2030年达2万亿。淘宝推出便利店品牌授权模式，美团闪电仓嵌入社区，京东七鲜1+N店仓协同。线上零售从等快递走向分钟达。", tags:["即时零售","万亿级","分钟达"], l:"http://finance.people.com.cn/n1/2026/0716/c1004-40762181.html"},
+    {id:12, c:"retail", t:"零售门店从卖货到造场：空间逻辑根本重构", s:"人民网", d:"2026-07-16", desc:"商务部等9部门发文明确线下零售为沉浸体验、娱乐社交的承载之地。零售逻辑从卖货场向第三空间升级。沃尔玛大店+社区店+电商构建全渠道矩阵，零售空间跨界共创增强体验性。", tags:["零售转型","造场","体验经济"], l:"http://finance.people.com.cn/n1/2026/0716/c1004-40762181.html"},
+    {id:13, c:"retail", t:"A股零售业业绩分化加剧：门店调改+供应链优化成胜负手", s:"经济网", d:"2026-07-24", desc:"A股零售业上半年业绩分化明显。盈利企业靠门店调改、供应链优化、数字化落地实现利润回升；亏损企业遭遇客流下滑、线上分流和固定成本高企的冲击。行业洗牌加速进行中。", tags:["零售业绩","分化","门店调改"], l:"https://www.ceweekly.cn/news/important/2026/0724/497765.html"},
+    {id:14, c:"ai", t:"AI Agent冲击SaaS：全球板块市值蒸发超万亿，估值跌至十年低位", s:"21世纪经济报道", d:"2026-05-21", desc:"自2025年9月至2026年5月，全球SaaS与企业应用软件板块累计市值蒸发超万亿美元。PitchBook数据显示SaaS企业ARR倍数从4.9倍跌至3.3倍。Anthropic发布Claude Cowork成为直接导火索。", tags:["SaaSpocalypse","AI冲击","估值体系"], l:"https://www.21jingji.com/article/20260521/herald/7366dc6e7605fa710e177ae306a9cb3b.html"},
+    {id:15, c:"ai", t:"京东数字人直播成绩单：8万商家使用，GMV翻倍，成本仅为真人10%", s:"DoNews/36氪", d:"2026-06-17", desc:"京东JoyStreamer数字人直播平台618期间服务超8万商家，日均开播增5倍，GMV同比+100%，转化率提升77%。成本仅为真人10%，可7×24小时不间断。AI数字人直播报价低至12元/小时。", tags:["数字人","直播","成本对比","案例数据"], l:"https://www.donews.com/news/detail/4/6599462.html"},
+    {id:16, c:"ai", t:"存量运营商AI客服可节省70%人力，退款挽单成功超20%", s:"每日经济新闻", d:"2026-06-17", desc:"电商AI客服大规模落地：京东京小智服务超百万商家，大模型服务量增长14倍；淘宝AI假图识别退款挽单成功率超20%；抖音飞鸽智能客服节省约70%人力成本。AI客服从成本中心转向利润中心。", tags:["AI客服","降本增效","落地数据"], l:"http://www.nbd.com.cn/articles/2026-06-17/4429825.html"},
+    {id:17, c:"ai", t:"纷享销客营收首超国际巨头，中国CRM进入Agentic时代", s:"北京日报/IDC", d:"2026-07-13", desc:"据IDC数据，纷享销客2025下半年以10%市占率蝉联本土CRM SFA SaaS第一，营收首次超越国际头部厂商。发布蜂巢智能体平台，开创Agentic CRM新时代。", tags:["SaaS","CRM","本土替代","AI Agent"], l:"https://news.bjd.com.cn/2026/07/13/11861953.shtml"},
+    {id:18, c:"ai", t:"中国SaaS 2026将达1167亿：云+SaaS+AI三位一体成为标准方案", s:"艾媒咨询/36氪", d:"2026-07-15", desc:"中国SaaS市场规模2026年预计达1167.6亿元。阿里云牵手Salesforce/SAP，腾讯云控股销售易。云+SaaS+AI成为企业数字化标准方案。", tags:["SaaS规模","云+AI","本土化"], l:"https://www.36kr.com/p/3679592710303623"},
+    {id:19, c:"business", t:"当硅谷革SaaS的命：中国ToB该恐慌还是觉醒？", s:"36氪/牛透社", d:"2026-06-15", desc:"硅谷SaaS已死论持续发酵。但中国ToB应更冷静——焦虑来源不同：硅谷担心订阅收入被侵蚀，中国焦点仍在盈利能力。", tags:["SaaS已死","中美差异","ToB格局"], l:"https://www.36kr.com/p/3679592710303623"},
+    {id:20, c:"business", t:"私域尽头是养客户：从GMV思维转向CLV思维", s:"微信公众号", d:"2026-07-20", desc:"最忠诚1%用户可贡献35%营收；复购率提升1%利润可能增加10%。健康指标：CLV/CAC>3。中高端品牌如山有松/之禾复购率40-60%。茵曼追求肌肉型增长，618增长超40%。", tags:["私域","CLV","复购率","茵曼案例"], l:"http://mp.weixin.qq.com/s?__biz=MzcwMjA0NDYyNQ==&mid=2247483663&idx=1&sn=6b4530a93b667290c19d25737a7717fa"},
+    {id:21, c:"business", t:"工信部等七部门发文：平台经济从流量驱动转向高质量发展", s:"东方财富", d:"2026-07-09", desc:"七部门印发《促进平台经济大中小企业协同发展行动方案（2026-2028年）》，明确三大路径：创新协同、生态协同、开放协同。平台经济从流量驱动转向规范化高质量发展。", tags:["平台经济","政策","高质量发展"], l:"https://finance.eastmoney.com/a/202607093799958994.html"},
+    {id:22, c:"data", t:"2026全球电商首破5万亿美元：中国占42%领跑，增速放缓至8.6%", s:"ECDB报告", d:"2026-07-20", desc:"全球电商收入达5.36万亿美元，线上零售占全球零售25.4%。增速从14%放缓至8.6%。中国42%份额领跑，美国22%。食品电商以14.4%增速领跑所有品类。", tags:["全球电商","5万亿","增速放缓"], l:"https://www.scea.co/trends/show/id/4131.html"},
+    {id:23, c:"data", t:"618消费洞察报告：货架电商回归，60%消费者选择主动搜索而非直播种草", s:"经济日报/上海市消保委", d:"2026-06-18", desc:"60%消费者选择货架电商，仅10%选择直播电商。消费者从跟风直播种草转向自主检索、理性比价。AI耳机零售额同比+227%，AI陪伴玩具+131%。", tags:["618报告","货架回归","AI消费"], l:"http://www.jingjiribao.cn/static/detail.jsp?id=664075"},
+    {id:24, c:"data", t:"2026年零售行业研究报告：缓增长时代，新零售渠道逆势高速增长", s:"东方财富/券商研报", d:"2026-07-20", desc:"5月社零同比下降0.6%，1-5月累计+1.4%；6月转正至+1.0%。线上渗透率达40.4%。服务消费增速+5.3%显著高于商品消费+1.1%。预计2030年社零总额达60万亿。", tags:["社零数据","消费趋势","线上渗透率"], l:"https://data.eastmoney.com/report/zw_industry.jshtml?encodeUrl=lfCg5GuIRBDoKH/4GRaxX3OH6iL+Fl/CX6PFnoUlJWY="}
+  ]
+};
+
+const DAILY_REPORT = {
+  "2026-07-25": `<h1 class="dr-h1">🐝 蜜蜂情报站 · 每日深度</h1>
+<p class="dr-meta"><strong>2026年7月25日 | 第2期</strong></p>
+<hr class="dr-hr">
+<h2 class="dr-h2">开篇：三件事发生在同一天，不是巧合</h2>
+<p class="dr-p">今天有三条消息，单独看都是行业新闻，放在一起看是一场系统性变革的共振。</p>
+<p class="dr-p"><strong>第一条：AI购物元年正式开启。</strong>阿里千问×淘宝打通、京东Agent接入腾讯元宝、字节豆包嵌入抖音。三大互联网巨头在同一个月完成了AI购物基础设施的全量搭建。</p>
+<p class="dr-p"><strong>第二条：SaaS商业模式正在被AI解构。</strong>Gartner说2030年有2340亿美元企业软件支出要受冲击。美国小企业开始退订Salesforce，用AI自建。SaaS从"按人头收费"走向"按结果收费"。</p>
+<p class="dr-p"><strong>第三条：实体零售迎来政策大礼包，同时行业剧烈分化。</strong>九部门联合发布零售业创新发展20条。永辉扭亏了，中百还在失血。胖东来上半年干了145亿。</p>
+<p class="dr-p">这三件事的底层逻辑是同一个：<strong>AI正在重新定义"什么是产品""什么是服务""什么是价值"。</strong></p>
+<p class="dr-p">但大多数人只看到碎片，没看到拼图。今天这篇日报，就是帮你拼出这张图——然后告诉你，这三件事跟你明天早上打的那通电话有什么关系。</p>
+<hr class="dr-hr">
+<h2 class="dr-h2">第一章：AI购物——不是升级，是替换</h2>
+<h3 class="dr-h3">发生了什么</h3>
+<p class="dr-p">7月15号到25号这十天，中国互联网发生了三件事——它们的时间线几乎重叠，不是巧合，是蓄谋已久：</p>
+<ul class="dr-ul">
+<li><strong>阿里</strong>：千问与淘宝全面打通，上线"AI帮我挑"。你在千问App里说"帮我找一款3000元以内、拍照好的手机"，千问直接进淘宝商品库检索、对比、排序，然后引导你下单支付。全程不用打开淘宝。</li>
+<li><strong>京东×腾讯</strong>：京东AI Agent接入腾讯元宝。你在元宝对话框说同样的话，AI从京东库里挑出最合适的，以卡片形式展示，点击跳转京东小程序完成交易。"边聊边买"。</li>
+<li><strong>字节</strong>：豆包嵌入抖音，上线"买前问豆包"。</li>
+</ul>
+<p class="dr-p">三家的共同判断：<strong>购物入口正在从"搜索框"变成"对话窗"。</strong></p>
+<h3 class="dr-h3">拆因果链：入口变了，谁的生意受影响？</h3>
+<p class="dr-p">先看消费者行为的变化路径：</p>
+<p class="dr-p"><strong>第一步</strong>：AI对话入口出现（千问/元宝/豆包）→ 消费者发现"说句话就能买东西"比搜关键词方便</p>
+<p class="dr-p"><strong>第二步</strong>：消费者从"打开App→搜→翻→比→下单"转向"打开对话框→说需求→AI推荐→直接买"</p>
+<p class="dr-p"><strong>第三步</strong>：流量分配逻辑改变——以前你花钱做SEO/SEM，让消费者搜到你；现在消费者不搜了，他跟AI说话——<strong>AI推荐综合分最高的人，不是出价最高的人</strong></p>
+<p class="dr-p"><strong>第四步</strong>：淘宝ShopX大模型发布→AI直接进商品空间自主规划、检索、排序、组合→进一步压缩商家"靠技巧获取流量"的空间</p>
+<p class="dr-p"><strong>这条因果链你讲给任何一个电商客户听，他的第一反应会是："那我怎么办？"——而这个"怎么办"正是你的机会。</strong></p>
+<h3 class="dr-h3">白鸦的思维框架：AI购物对商家意味着什么？</h3>
+<p class="dr-p">白鸦在多个场合说过一个判断，看起来简单但细想很深：</p>
+<blockquote class="dr-blockquote"><p>"电商的下半场，从'运营流量'变成'运营产品力'。"</p></blockquote>
+<p class="dr-p">他的推理过程是：</p>
+<p class="dr-p"><strong>① 当入口从搜索变成对话，信息不对称消失了</strong><br>以前商家靠标题优化、关键词堆砌、主图差异来获客——这些是"搜索技巧"。消费者搜苹果手机，前3页的商家不一定是最好的，但一定是最会做搜索优化的。现在AI直接检索商品库，按综合效率排序——你的标题写得再好，产品评分低、退货率高、售后差，AI直接把你过滤掉。</p>
+<p class="dr-p"><strong>② 流量成本的结构正在重组</strong><br>以前流量成本=广告费+运营人员工资。以后流量成本=产品力（品质+服务+口碑）。钱从"买流量"变成了"做产品"。短期看投入更大了，但长期看这是正向循环——产品越好→评分越高→AI越推荐→流量越多→利润越高→产品可以更好。</p>
+<p class="dr-p"><strong>③ 哪些商家最危险？</strong><br>靠信息差卖货的、靠低价引流的、靠刷单维持评分的——这些在AI购物时代会加速淘汰。</p>
+<p class="dr-p"><strong>这个框架你学会了，不只是用来回答客户"AI购物怎么办"——它本质上是一个判断"什么生意能活下来"的标准。</strong></p>
+<h3 class="dr-h3">所以呢？——你今天打电话怎么用</h3>
+<p class="dr-p">下次你跟电商客户聊，不要说"AI购物是个趋势"这种废话。</p>
+<p class="dr-p">换个说法：</p>
+<blockquote class="dr-blockquote"><p>刘总，你有没有注意到，现在淘宝已经开始让千问AI帮你挑东西了？消费者不搜了，他直接跟AI说需求。你猜AI推荐谁？不是出价最高的人——是综合评分最高的人。你的店如果在AI系统里评分不够好，连被推荐的机会都没有。我今天就是想跟你聊聊，怎么让你的店在任何渠道都"值得被推荐"。</p></blockquote>
+<p class="dr-p">你看，这句话里你讲的是趋势，但他听到的是"跟我的生意直接相关"。</p>
+<hr class="dr-hr">
+<h2 class="dr-h2">第二章：SaaS被AI解构——但跟你看到的"SaaS已死"不一样</h2>
+<h3 class="dr-h3">发生了什么</h3>
+<p class="dr-p">今天的第二条主线，对做SaaS销售的你来说更直接。几件事同时发生：</p>
+<ul class="dr-ul">
+<li><strong>Gartner报告</strong>：到2030年，2340亿美元企业应用软件支出中将有约20%受"智能体套利"冲击。AI智能体可以跨多个系统完成工作，降低用户对传统软件界面的需求。</li>
+<li><strong>美国小企业退订潮</strong>：多家20-70人公司用Anthropic+Replit自建CRM/ERP替代Salesforce，年省数万到数十万美元，维护成本仅几百美元。Salesforce 2026年股价跌约30%。</li>
+<li><strong>SaaS定价模式剧变</strong>：Salesforce推pay-per-resolution（每次成功解决2美元）；迈富时场景Token净利预增近500%；阿里云CTO在WAIC上明确"SaaS将迁移到智能体服务模式"。</li>
+</ul>
+<h3 class="dr-h3">拆因果链：SaaS到底在经历什么？</h3>
+<p class="dr-p"><strong>第一步</strong>：AI能力变强，可以替代"流程执行类"软件功能（数据录入、报表生成、流程审批）→ 传统软件的用户价值降低</p>
+<p class="dr-p"><strong>第二步</strong>：企业发现"与其给每个人买软件座位，不如让AI替这些人干活" → 智能体套利产生 → 退订传统SaaS</p>
+<p class="dr-p"><strong>第三步</strong>：资本市场看到风险 → 抛售SaaS股票 → Salesforce/IBM/Adobe股价暴跌</p>
+<p class="dr-p"><strong>第四步</strong>：但仔细看——被冲击的都是"工具型SaaS"。"经营型SaaS"不仅没受影响，反而在增长</p>
+<p class="dr-p"><strong>第五步</strong>：中国SaaS市场2026年预计达1167亿，还在增长。迈富时净利预增近500%。为什么？因为中国SaaS跟美国SaaS走得不是一条路——中国SaaS离交易更近，离业务更深</p>
+<h3 class="dr-h3">白鸦的思维框架：有赞为什么跟Salesforce不一样？</h3>
+<p class="dr-p">今天这组新闻对做有赞销售的你来说，是天然的话术弹药。因为客户一定会问："SaaS不是被AI冲击了吗？你们有赞怎么办？"</p>
+<p class="dr-p">白鸦其实早就给出了答案，他的判断框架是：</p>
+<p class="dr-p"><strong>"前端软件有护城河，后端软件会被打碎。"</strong></p>
+<p class="dr-p">为什么？</p>
+<p class="dr-p"><strong>① 离交易近的软件，数据是活的</strong><br>有赞管的是商品上架、订单处理、客户触达、资金流转——这些是商家每天都在运行的业务数据。数据是活的，是正在发生的交易。AI无法凭空生成这些数据，它只能分析这些数据。</p>
+<p class="dr-p"><strong>② 离业务远的软件，数据是死的</strong><br>传统ERP管的是库存记录、流程审批——这些数据是"做完了录入系统"的。AI能看懂、能分析、能替代录入这件事。</p>
+<p class="dr-p"><strong>③ 单纯的软件容易被替代，深度的服务不会</strong><br>这也是为什么迈富时提出的"场景Token"模式——不是卖软件，是卖业务结果。你帮客户做了多少营销、产生了多少销售，就收多少钱。AI不是来替代你的，AI是帮你以更低成本交付结果的工具。</p>
+<p class="dr-p"><strong>这个框架你学会了，下次遇到客户质疑SaaS价值的时候，你就有了一套清晰的判断标准。</strong></p>
+<h3 class="dr-h3">所以呢？——客户说"SaaS被AI替代了"</h3>
+<p class="dr-p">你正确的回应方式：</p>
+<blockquote class="dr-blockquote"><p>你说得对，确实有一部分SaaS会被替代。但你看被替代的是哪种——记库存的、管流程的、跑审批的，这些是"装了就不用管"的工具。但你看你的生意——你每天要上什么品、定什么价、推什么活动、维护哪些客户——这些事AI不知道，但有赞知道。有赞不是记录你的工作，是参与你的工作。你的业务跑在有赞上，AI来了帮你更高效地做这些事，而不是替代你。</p></blockquote>
+<p class="dr-p">你顺着客户说了一句"对，确实会替代一些"——他不跟你顶了。然后你给出了精确的区分，他就接受了你的框架。</p>
+<hr class="dr-hr">
+<h2 class="dr-h2">第三章：实体零售的政策大礼包——谁的春天谁的冬天</h2>
+<h3 class="dr-h3">发生了什么</h3>
+<p class="dr-p">九部门联合发布《关于加快零售业创新发展的意见》20条——近年来力度最大的零售业系统性政策。几个关键点：</p>
+<ul class="dr-ul">
+<li><strong>首次明确线上线下零售一视同仁</strong>：反垄断、反不正当竞争、同品同质同标</li>
+<li><strong>资源向实体倾斜</strong>：用地保障、融资支持、REITs、减税降负</li>
+<li><strong>明确新业态方向</strong>：即时零售、自有品牌、零售跨界融合</li>
+</ul>
+<p class="dr-p">同时，A股零售中报出炉——分化剧烈：</p>
+<div class="dr-table-wrap">
+<table class="dr-table">
+<thead><tr><th>企业</th><th>上半年成绩</th><th>核心动作</th><th>关键指标</th></tr></thead>
+<tbody>
+<tr><td><strong>永辉</strong></td><td>扭亏，净利2.5亿</td><td>关400家低效店+331家胖东来式调改</td><td>毛利率提升1.6%→21.4%</td></tr>
+<tr><td><strong>红旗连锁</strong></td><td>扣非+8%至2.75亿</td><td>极致本地化供应链</td><td>毛利率稳定30%+</td></tr>
+<tr><td><strong>中百集团</strong></td><td>续亏2.5-3.3亿</td><td>关了414家，模式没改</td><td>"装修式自救"</td></tr>
+<tr><td><strong>胖东来</strong></td><td>145亿+24%</td><td>自建供应链+极致服务</td><td>许昌社零全省第一</td></tr>
+</tbody>
+</table>
+</div>
+<h3 class="dr-h3">拆因果链：同样面对政策机会，为什么差距这么大？</h3>
+<p class="dr-p"><strong>第一步</strong>：消费增长放缓（社零+1.3%）→ 实体零售普遍承压</p>
+<p class="dr-p"><strong>第二步</strong>：政策出手——9部门20条给予资源倾斜 → 但不是所有实体零售都能接住</p>
+<p class="dr-p"><strong>第三步</strong>：有准备的零售企业（永辉/胖东来/红旗）早就在做内部升级——门店调改、供应链优化、数字化 → 政策是放大器，让好的更好</p>
+<p class="dr-p"><strong>第四步</strong>：没准备的零售企业（中百等）以为"关了亏损店就是改革"→ 关了店但没改模式 → 政策来了也没用</p>
+<p class="dr-p"><strong>第五步</strong>：分化加速——2026下半年会出现更清晰的"好零售越来越好、差零售加速出清"</p>
+<p class="dr-p"><strong>这条因果链你讲给实体零售客户听，他会觉得你很懂他的行业。</strong></p>
+<h3 class="dr-h3">白鸦的思维框架：实体零售的终局是什么？</h3>
+<p class="dr-p">白鸦在评论零售趋势时说过一句话：</p>
+<blockquote class="dr-blockquote"><p>"线下零售不是被替代，是被重新定义——从'交易场'变成'关系场'。"</p></blockquote>
+<p class="dr-p">他的推理：</p>
+<p class="dr-p"><strong>① 线上效率再高，也解决不了"信任"和"体验"</strong><br>你去胖东来买东西，不是因为线上买不到——是因为你相信胖东来的选品、你看得到摸得着、你享受那种被服务的感觉。线上能给你效率，但不能给你信任。</p>
+<p class="dr-p"><strong>② 实体零售的价值，不在"卖货"本身</strong><br>"卖货"这件事线上效率已经拉满了。线下零售的价值在于"场景+体验+关系"——这也是为什么政策提出"零售从卖货场向第三空间升级"。</p>
+<p class="dr-p"><strong>③ 但商家的"关系经营"需要数字化工具</strong><br>线下店的客户离店就失联了——你不知道谁来过了、买了什么、下次什么时候来。有赞能帮商家把"线下关系"变成"线上资产"。</p>
+<p class="dr-p"><strong>这个框架你学会了，不只是用来看实体零售——它回答的是一个更根本的问题：在线上效率如此之高的今天，线下生意为什么还能活？</strong></p>
+<h3 class="dr-h3">所以呢？——跟实体零售客户聊什么</h3>
+<p class="dr-p">下次你跟实体零售客户聊，不要说"有赞能帮你做线上商城"。太low了。</p>
+<p class="dr-p">换个说法：</p>
+<blockquote class="dr-blockquote"><p>王总，你看你同行——胖东来半年做了145亿，商务部都在点赞。但你知道胖东来最厉害的是什么吗？不是他的商品多好——是他的客户愿意为他排队。他把客户关系做成了护城河。你在线下经营了这么多年，你的客户离店之后你还联系得上吗？你知道哪些客户常来、哪些客户好久没来了吗？</p></blockquote>
+<p class="dr-p">你帮他看到的是"自己手里有资源但没用起来"——这个痛点比任何一个功能卖点都痛。</p>
+<hr class="dr-hr">
+<h2 class="dr-h2">终章：三个信号指向同一个答案</h2>
+<p class="dr-p">今天的三条线——AI购物元年、SaaS商业模式重构、实体零售政策分化——讲的其实是同一个故事。</p>
+<p class="dr-p">这个故事的主线是：<strong>技术正在重构"交易的方式"。</strong></p>
+<p class="dr-p">以前交易靠搜索（人找货），以后交易靠对话（AI帮你匹配）。<br>以前软件靠卖座（按人头收租），以后软件靠卖结果（按效果收费）。<br>以前零售靠位置（地段好就赚钱），以后零售靠经营（系统好才赚钱）。</p>
+<p class="dr-p">这三条线都指向同一个结论：<strong>做生意的方式变了，而且变得很快。</strong></p>
+<p class="dr-p">你作为销售，不是去跟客户科普趋势的——你是帮客户在趋势里找到自己的位置的。</p>
+<hr class="dr-hr">
+<h2 class="dr-h2">附：你今天可以直接用的三句话</h2>
+<p class="dr-p">看完这篇日报，带走三句话就够了。这三句话都是可以直接打电话用的：</p>
+<div class="dr-table-wrap">
+<table class="dr-table">
+<thead><tr><th>场景</th><th>一句话</th></tr></thead>
+<tbody>
+<tr><td><strong>聊AI购物</strong></td><td>"刘总，消费者开始在对话框里买东西了。AI推荐的不是出价最高的人，是综合表现最好的人——你的店配不配被推荐？"</td></tr>
+<tr><td><strong>聊SaaS被AI冲击</strong></td><td>"李总，有些SaaS会消失，有些会更强——区别是：你是把生意装进了系统，还是顺便用了个系统。"</td></tr>
+<tr><td><strong>聊实体零售新政</strong></td><td>"王总，政策给机会了——但只有准备好的人接得住。胖东来不是靠政策成功的，是靠体系成功的。"</td></tr>
+</tbody>
+</table>
+</div>
+<h3 class="dr-h3">今日关键数据速查</h3>
+<div class="dr-table-wrap">
+<table class="dr-table">
+<thead><tr><th>数据</th><th>数值</th><th>一句话谈资</th></tr></thead>
+<tbody>
+<tr><td>上半年网上零售额</td><td>64,296亿 +4.8%</td><td>"电商还在增长，但不是所有商家都在增长——看你在哪个赛道"</td></tr>
+<tr><td>智能外骨骼/眼镜增长</td><td>+458%/+152%</td><td>"智能品类的爆发窗口已经开了——你的客户有没有在做？"</td></tr>
+<tr><td>胖东来上半年销售额</td><td>145亿 +24%</td><td>"不是生意不好做，是你的生意方式不对"</td></tr>
+<tr><td>Gartner AI冲击体量</td><td>2340亿美元·20%</td><td>"AI不是未来，是正在拆解你买的每一套软件"</td></tr>
+<tr><td>中国直播电商规模</td><td>9000亿美元</td><td>"中国直播电商已经等于整个美国电商——你猜谁在这个池子里赚钱？"</td></tr>
+<tr><td>线上消费增长贡献率</td><td>88.3%</td><td>"不做电商，你失去的是88.3%的增长——这个数字你敢跟客户说吗？"</td></tr>
+<tr><td>Salesforce 2026股价跌幅</td><td>约30%</td><td>"按人头收费的SaaS模式正在被AI终结——但你不是这样的SaaS"</td></tr>
+</tbody>
+</table>
+</div>
+<p class="dr-footnote">今日情报采集自：商务部、人民网、36氪、东方财富、Gartner、NielsenIQ、新京报、网易财经、央视财经、证券时报等20+来源。<br>明日干货继续。</p>`,
+  "2026-07-24": `<h1 class="dr-h1">🐝 蜜蜂情报站 · 每日深度</h1>
+<p class="dr-meta"><strong>2026年7月24日 | 第1期</strong></p>
+<hr class="dr-hr">
+<h2 class="dr-h2">开篇：一个让所有电商老板凌晨三点睡不着的数字</h2>
+<p class="dr-p">你有没有想过这个问题——</p>
+<p class="dr-p"><strong>你做1亿GMV，不算账很开心，一算账发现只值3000万。</strong></p>
+<p class="dr-p">不夸张。今年服装直播退货率已经到了70%-80%。你做1亿，发出去了，退回来了，再发出去，再退回来。年底一算账：物流费付了1亿的、包装费付了1亿的、人工费付了1亿的——但真实成交只有3000万。</p>
+<p class="dr-p">这不是某个品类的偶发案例。这是一个正在发生的结构性信号。</p>
+<p class="dr-p">今天采集回来的所有情报，指向的其实是同一个问题：<strong>过去五年驱动电商增长的那套逻辑，已经走到尽头了。新的逻辑是什么？跟你有赞销售有什么关系？我今天想跟你聊聊这个。</strong></p>
+<hr class="dr-hr">
+<h2 class="dr-h2">第一章：价格战的尽头，是行业性亏损</h2>
+<h3 class="dr-h3">发生了什么</h3>
+<p class="dr-p">今天的几组数据放在一起看，不像是巧合：</p>
+<ul class="dr-ul">
+<li>9部门联合发文，<strong>禁止算法唯价格论</strong>，平台不能再强制商家承担补贴</li>
+<li>618消费洞察报告显示，<strong>60%消费者主动搜索货架电商</strong>，仅10%选直播</li>
+<li>商家端：47.68%说流量成本太高，45%"有规模无利润"，超30%亏损</li>
+<li>服装直播退货率飙到70-80%</li>
+</ul>
+<h3 class="dr-h3">拆因果链：为什么会这样？</h3>
+<p class="dr-p">从第一步开始推——</p>
+<p class="dr-p"><strong>第一步</strong>：平台竞争白热化（抖音/拼多多/淘宝互卷）→ 平台把价格压力转嫁给商家 → 商家被迫参与低价竞争</p>
+<p class="dr-p"><strong>第二步</strong>：商家利润被压缩 → 为了维持利润，降低品质、夸大宣传 → 消费者收到货不满意 → 退货率飙升</p>
+<p class="dr-p"><strong>第三步</strong>：退货率飙升 → 物流/包装/人工全部空转 → 有规模无利润（45%商家的真实写照）</p>
+<p class="dr-p"><strong>第四步</strong>：商家不赚钱 → 减少投放、缩减团队 → 平台增长放缓 → 平台慌了 → 9部门发文干预 → 游戏规则开始变</p>
+<p class="dr-p"><strong>这条因果链你讲给任何一个电商客户听，他都会点头。</strong></p>
+<p class="dr-p">因为他们自己在里面，但可能从来没把这一整条链串起来想过。你帮他串起来了，你就比他自己还懂他的处境。</p>
+<h3 class="dr-h3">白鸦的思维框架：他是怎么判断这个趋势的</h3>
+<p class="dr-p">白鸦最近反复说一句话：</p>
+<blockquote class="dr-blockquote"><p>"过去十年电商的核心驱动力是流量和价格，未来十年的核心驱动力是效率和关系。"</p></blockquote>
+<p class="dr-p">你听过这句话。但你可能没想过——<strong>他是怎么推理出这个结论的？</strong></p>
+<p class="dr-p">他的推理框架可以拆成三步：</p>
+<p class="dr-p"><strong>① 看成本结构的变化</strong><br>当流量成本已经高到47.68%的商家扛不住的时候，"靠便宜流量赚钱"的模式就不可持续了。这不是谁想不想变的问题——是数学上算不过来了。</p>
+<p class="dr-p"><strong>② 看系统怎么自我调节</strong><br>一个行业里超过60%的参与者不赚钱或微利，这个游戏规则一定会被改变。不是某个平台想改，是系统自己会启动调节机制。9部门发文就是这个调节机制的体现。</p>
+<p class="dr-p"><strong>③ 判断新方向</strong><br>效率：同样的投入能不能产出更多？——AI客服、AI投放、AI直播都是这个逻辑。<br>关系：客户买完能不能再买？——私域、会员、复购，都是这个逻辑。</p>
+<p class="dr-p"><strong>这个框架你学会了，不只是用来看价格战。下次看到任何一个行业变化，你都可以这么推：成本变了吗？系统在调吗？新方向在哪？</strong></p>
+<h3 class="dr-h3">所以呢？——对你今天销售的意义</h3>
+<p class="dr-p">下次你跟做服装的客户聊，不要说"有赞能帮你管库存"之类的话。</p>
+<p class="dr-p">换个说法：</p>
+<blockquote class="dr-blockquote"><p>王总，我给你算一笔账。你2025年做了多少GMV？如果退货率70%，那意味着你的实际成交只有30%。物流费、包装费、人工费，你全按100%付的。如果你能把退货率从70%降到50%，你的利润直接翻一倍都不用。我今天不是来跟你推销系统的，我是来帮你算这笔账的。</p></blockquote>
+<p class="dr-p"><strong>你卖的不是功能，是对他生意的理解。</strong></p>
+<hr class="dr-hr">
+<h2 class="dr-h2">第二章：AI进场了——但大多数人站错了位置</h2>
+<h3 class="dr-h3">发生了什么</h3>
+<p class="dr-p">今天采集到的AI相关数据很有意思，我来排个序：</p>
+<p class="dr-p">看起来很好的：</p>
+<ul class="dr-ul">
+<li>京东数字人直播8万商家在用，成本仅真人10%，GMV翻倍</li>
+<li>AI客服省70%人力，退款挽单成功率超20%</li>
+<li>AI营销全托管，订单增速高于大盘10个百分点</li>
+</ul>
+<p class="dr-p">看起来矛盾的：</p>
+<ul class="dr-ul">
+<li><strong>95%商家已用AI，但持续用的只有33%</strong></li>
+<li>行业共识：<strong>降本明显，增收存疑</strong></li>
+</ul>
+<h3 class="dr-h3">拆因果链：为什么95%用了、只有33%持续用？</h3>
+<p class="dr-p"><strong>第一步</strong>：AI工具大量涌现，门槛极低 → 几乎所有商家都能用上AI（95%）</p>
+<p class="dr-p"><strong>第二步</strong>：AI做基础工作确实省钱（文案、客服、直播基本替代）→ 成本降下来了</p>
+<p class="dr-p"><strong>第三步</strong>：但AI降低门槛的同时，供给也增加了 → 你做10条AI短视频，别人也做10条 → 内容过剩 → 获客难度不降反升</p>
+<p class="dr-p"><strong>第四步</strong>：商家发现"省了钱但没多赚钱" → 一部分停用（62%停用或偶尔用），另一部分调整策略把AI嵌入核心流程（33%持续用）</p>
+<p class="dr-p"><strong>第五步</strong>：剪刀差出现——会用AI的商家成本更低了、效率更高了；不会用的被淘汰了；半途而废的回到了原点</p>
+<p class="dr-p"><strong>这条因果链你能回答客户最常问的一个问题："AI到底有没有用？"</strong></p>
+<p class="dr-p">答案是：<strong>有用，但用处不在你想象的地方。</strong> 它不是万能药，不是一个"开了AI自动赚钱"的开关。它的真实价值是：帮你把流程化的事做了，让你腾出时间去做只有人能做的事。</p>
+<h3 class="dr-h3">白鸦的思维框架：他是怎么判断AI对谁有用、对谁没用的</h3>
+<p class="dr-p">白鸦说了一句看起来矛盾的话：</p>
+<blockquote class="dr-blockquote"><p>"AI替代了客服，但销售团队反而从1300人加到1800人。"</p></blockquote>
+<p class="dr-p">如果你只是引用这句话，客户会说"你们是卖软件的当然这么说"。</p>
+<p class="dr-p">但如果你拆开他的判断逻辑，你会发现这不是立场，是框架：</p>
+<p class="dr-p"><strong>他的判断框架只有两个问题：</strong></p>
+<p class="dr-p"><strong>① 这个岗位/工作的核心是"流程执行"还是"判断决策"？</strong></p>
+<p class="dr-p">客服接电话 → 查订单 → 退换货 → 这套流程AI完全可以替代 → 所以客服被替代<br>销售打电话 → 判断客户为什么犹豫 → 决定什么时候跟 → 用什么策略 → 这套需要判断 → AI替代不了，但可以辅助</p>
+<p class="dr-p"><strong>② 这个工具是"替代人"还是"放大人的能力"？</strong></p>
+<p class="dr-p">AI直播是替代人（数字人代替真人主播）→ 降本<br>AI销售辅助是放大人的能力（帮销售分析客户画像、推荐话术）→ 增收</p>
+<p class="dr-p"><strong>这两个框架你学会了，下次看到任何一个"AI能不能干这个"的问题，自己就能判断。</strong></p>
+<h3 class="dr-h3">所以呢？——跟客户聊AI的正确姿势</h3>
+<p class="dr-p">不要站队"AI好"或"AI不好"。那是卖课的人做的事。</p>
+<p class="dr-p">你这样说：</p>
+<blockquote class="dr-blockquote"><p>李总，我最近也在研究AI在咱们电商到底能干什么。我的结论是：<strong>AI能帮你省钱，但不能帮你赚钱。赚钱的事还是得你自己想清楚——卖什么、卖给谁、怎么卖。</strong> 但好消息是，如果你用AI把省钱的活干了，你就有更多时间想清楚赚钱的事。</p></blockquote>
+<p class="dr-p">你看，这句话里你既不是AI吹，也不是AI黑。你是帮他想问题的。</p>
+<hr class="dr-hr">
+<h2 class="dr-h2">第三章：SaaS"死了"——死的是旧物种，新物种正在长出来</h2>
+<h3 class="dr-h3">发生了什么</h3>
+<p class="dr-p">今天最炸的一条行业新闻：</p>
+<p class="dr-p"><strong>全球SaaS企业软件板块市值蒸发超万亿，ARR估值倍数从4.9倍跌到3.3倍。</strong></p>
+<p class="dr-p">核心导火索是Anthropic发布了产品——资本市场觉得"如果AI能直接干活了，还要SaaS干什么？"</p>
+<p class="dr-p">但同一时间，另一些数据在说不同的故事：</p>
+<ul class="dr-ul">
+<li>中国SaaS市场2026年预计达<strong>1167亿</strong>，还在增长</li>
+<li>纷享销客去年市占率<strong>首超国际巨头</strong></li>
+<li>有赞2025年<strong>首次实现全年盈利</strong></li>
+</ul>
+<h3 class="dr-h3">拆因果链：SaaS到底死没死？</h3>
+<p class="dr-p"><strong>第一步</strong>：AI能力变强，能做很多软件做的事（记录数据、生成报表、自动化流程）→ 纯"记录工作"的软件价值降低</p>
+<p class="dr-p"><strong>第二步</strong>：资本市场看到这个风险 → 抛售SaaS股票 → 板块估值暴跌（蒸发超万亿）</p>
+<p class="dr-p"><strong>第三步</strong>：但商家对"能帮自己赚钱的工具"需求反而更强了 → 靠近交易、靠近业务的SaaS继续增长</p>
+<p class="dr-p"><strong>第四步</strong>：行业大分化——"纯管理型SaaS"（传统ERP、基础CRM）被冲击，"参与经营型SaaS"（有赞、Shopify）反而更受重视</p>
+<p class="dr-p"><strong>第五步</strong>：分化的结果——以前的SaaS是大一统市场，现在的SaaS是"能帮客户赚钱的活，不能的"。</p>
+<h3 class="dr-h3">白鸦的思维框架：他是怎么看SaaS未来方向的</h3>
+<p class="dr-p">白鸦的分类框架其实很朴素：</p>
+<blockquote class="dr-blockquote"><p><strong>"前端软件有护城河，后端会被打碎。"</strong></p></blockquote>
+<p class="dr-p">他不是随便说的。他的推导过程是：</p>
+<p class="dr-p"><strong>① 离客户越近的软件越值钱</strong><br>有赞管的是商品上架、活动设置、客户触达、售后处理——这是商家每天跟客户打交道的地方。AI不知道你的客户喜欢什么，不知道你这个月的营销目标是什么。</p>
+<p class="dr-p"><strong>② 离业务越远的软件越危险</strong><br>传统ERP管的是库存记录、流程审批——这些事AI能看懂、能执行、能替代。</p>
+<p class="dr-p"><strong>③ "单纯卖算力最终会陷入价格战"</strong><br>白鸦的逻辑：如果你提供的东西只有"算力"（记录、计算、存储），那AI能用更低成本提供同样的东西。但如果你提供的是"判断力"（帮客户做决策、做策略），AI替代不了。</p>
+<h3 class="dr-h3">所以呢？——客户说"SaaS都快被AI替代了"</h3>
+<p class="dr-p">你不应该反驳他，你应该说：</p>
+<blockquote class="dr-blockquote"><p>你说得对，确实有一部分SaaS会被替代。但你看看被替代的是哪种——记库存的、管流程的、跑审批的。有赞干的事不一样：它帮你上架商品、设置活动、触达客户、处理售后。你上个月上架了什么新品、哪些客户买了、哪些客户没复购——这些事AI不知道，但有赞知道。它不是记录你的工作，是参与你的工作。</p></blockquote>
+<p class="dr-p">注意这里面你顺着客户说了一句"你说得对"——他就不跟你顶了，然后你给出了一个更精细的判断："是的，但跟你没关系"。</p>
+<hr class="dr-hr">
+<h2 class="dr-h2">终章：三个你学会了的思维框架</h2>
+<p class="dr-p">如果你今天只带走三样东西，我建议你带走这三个思维框架。它们不是知识，是你以后自己判断问题的工具。</p>
+<h3 class="dr-h3">框架一：效率 vs 关系</h3>
+<p class="dr-p">看到一个行业变化/新工具，问自己：这个是在提高效率，还是在加深关系？</p>
+<ul class="dr-ul">
+<li>价格战 → 效率（但损人不利己）</li>
+<li>私域 → 关系（长期积累）</li>
+<li>AI客服 → 效率（可以马上用）</li>
+<li>有赞CRM → 关系（值得认真推）</li>
+</ul>
+<h3 class="dr-h3">框架二：流程执行 vs 判断决策</h3>
+<p class="dr-p">看到一个岗位/工具被AI替代的新闻，问自己：它的核心是流程执行，还是判断决策？</p>
+<ul class="dr-ul">
+<li>流程执行 → 必然被替代（不用挣扎）</li>
+<li>判断决策 → AI辅助，不会替代（值得投入）</li>
+</ul>
+<h3 class="dr-h3">框架三：前线 vs 后台</h3>
+<p class="dr-p">判断一个软件/服务的护城河：离交易近还是离交易远？</p>
+<ul class="dr-ul">
+<li>近 → 有护城河（有赞）</li>
+<li>远 → 会被打碎（传统ERP）</li>
+</ul>
+<hr class="dr-hr">
+<h2 class="dr-h2">附：今天三条必记的"所以呢"</h2>
+<p class="dr-p">最后给你三组今天可以直接用的话——不是一个数据，是一句完整的话：</p>
+<div class="dr-table-wrap">
+<table class="dr-table">
+<thead><tr><th>信息</th><th>一句完整的话（打电话/面访直接用）</th></tr></thead>
+<tbody>
+<tr><td>退货率70-80%</td><td>"王总，你知不知道你现在做1亿GMV，退货吃掉了7000万？如果能从70%降到50%，利润直接翻倍"</td></tr>
+<tr><td>AI数字人成本仅真人10%</td><td>"张总，12块钱一小时挂24小时直播，你有8万个同行已经在用了，你是在用还是没在用？"</td></tr>
+<tr><td>60%消费者选货架搜索</td><td>"李总，一个数据——60%的人现在买东西是主动搜，不是刷直播买的。你的店能不能被搜到？"</td></tr>
+</tbody>
+</table>
+</div>
+<p class="dr-footnote">今日情报采集自：亿邦动力、36氪、21世纪经济报道、人民网、东方财富、经济日报、IDC、艾媒咨询、蝉妈妈、电商报、联商网等15+来源。<br>明日干货继续。</p>`
+};
+
+const CAT_MAP = {
+  ecommerce: { label:"电商行业", icon:"📦", tagCls:"tag-ecommerce", bgCls:"cat-icon-bg-ecommerce", desc:"平台动态、品类趋势、商家生态、运营打法" },
+  retail:    { label:"实体行业", icon:"🏪", tagCls:"tag-retail",    bgCls:"cat-icon-bg-retail",    desc:"零售连锁、餐饮、美业、本地生活、消费品牌" },
+  ai:        { label:"AI与软件", icon:"🤖", tagCls:"tag-ai",       bgCls:"cat-icon-bg-ai",       desc:"AI行业动态、SaaS趋势、工具评测、行业应用" },
+  business:  { label:"生意与销售思维", icon:"💼", tagCls:"tag-business", bgCls:"cat-icon-bg-business", desc:"商业思维、销售方法论、创业者洞察、白鸦观点" },
+  data:      { label:"行业数据与报告", icon:"📊", tagCls:"tag-data",    bgCls:"cat-icon-bg-data",    desc:"权威机构数据、行业研报、白皮书、市场调研" }
+};
+const CAT_ORDER = ["ecommerce","retail","ai","business","data"];
+const CAT_SUBTAGS = {
+  ecommerce: ["平台动态","品类趋势","商家生态","运营打法"],
+  retail:    ["零售连锁","餐饮","美业","本地生活"],
+  ai:        ["AI行业动态","SaaS趋势","工具评测","行业应用"],
+  business:  ["商业思维","销售方法论","创业者洞察","白鸦观点"],
+  data:      ["电商数据","消费趋势","AI渗透率","SaaS市场"]
+};
+const WEEKDAY_CN = ["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+
+function getWeekday(dateStr) {
+  return WEEKDAY_CN[new Date(dateStr+"T00:00:00").getDay()];
+}
+function getSortedDates() { return Object.keys(ALL_DATA).sort().reverse(); }
+
+/* ---- Mode Toggle ---- */
+document.querySelectorAll('.mode-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.mode-content').forEach(el => el.classList.remove('active'));
+    document.getElementById('mode-'+btn.dataset.mode).classList.add('active');
+  });
+});
+
+/* ---- Knowledge Base (with search & date grouping) ---- */
+function renderKnowledgeBase(searchTerm) {
+  let allItems = [];
+  Object.values(ALL_DATA).forEach(arr => { allItems = allItems.concat(arr); });
+
+  // Apply search filter if provided
+  if (searchTerm) {
+    const st = searchTerm.toLowerCase();
+    allItems = allItems.filter(item =>
+      item.t.toLowerCase().includes(st) ||
+      item.desc.toLowerCase().includes(st) ||
+      item.s.toLowerCase().includes(st) ||
+      (item.tags || []).some(t => t.toLowerCase().includes(st))
+    );
+  }
+
+  const sources = new Set(allItems.map(i => i.s));
+  const dates = getSortedDates();
+  document.getElementById('statItems').textContent = allItems.length;
+  document.getElementById('statSources').textContent = sources.size;
+  document.getElementById('statUpdated').textContent = dates[0] || '-';
+
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = '';
+  CAT_ORDER.forEach(key => {
+    const cat = CAT_MAP[key];
+    const subTags = CAT_SUBTAGS[key] || [];
+    const catItems = allItems.filter(i => i.c === key);
+
+    // Group by month
+    const monthGroups = {};
+    catItems.forEach(item => {
+      const m = item.d.substring(0, 7);
+      if (!monthGroups[m]) monthGroups[m] = [];
+      monthGroups[m].push(item);
+    });
+    const months = Object.keys(monthGroups).sort().reverse();
+
+    function monthLabel(m) {
+      const [y, mo] = m.split('-');
+      return `${y}年${parseInt(mo)}月`;
+    }
+
+    let itemsHTML = '';
+    if (catItems.length) {
+      months.forEach((m, mi) => {
+        const items = monthGroups[m];
+        itemsHTML += `
+          <div class="date-group">
+            <div class="date-group-header" data-dgk="${key}:${m}">
+              <span class="date-group-arrow">${mi === 0 ? '▼' : '▶'}</span>
+              <span class="date-group-label">${monthLabel(m)}</span>
+              <span class="date-group-count">${items.length} 条</span>
+            </div>
+            <div class="date-group-items"${mi > 0 ? ' style="display:none"' : ''}>
+              ${items.map(item => `
+                <div class="kb-item">
+                  <div class="kb-item-info">
+                    <a href="${item.l}" target="_blank" rel="noopener" class="kb-item-title">${item.t}</a>
+                    <div class="kb-item-meta">${item.s} · ${item.d}</div>
+                  </div>
+                  <a href="${item.l}" target="_blank" rel="noopener" class="kb-item-link">原文</a>
+                </div>
+              `).join('')}
+            </div>
+          </div>`;
+      });
+    } else {
+      itemsHTML = `<div style="padding:12px 0;color:var(--text-light);font-size:13px;text-align:center;">暂无${searchTerm ? '匹配' : '沉淀'}内容</div>`;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'cat-card';
+    card.dataset.cat = key;
+    card.innerHTML = `
+      <div class="cat-card-header">
+        <div class="cat-icon ${cat.bgCls}">${cat.icon}</div>
+        <div>
+          <div class="cat-name">${cat.label}</div>
+          <div class="cat-count">${catItems.length} 条${searchTerm ? '匹配结果' : '沉淀情报'}</div>
+        </div>
+      </div>
+      <div class="cat-desc">${cat.desc}</div>
+      <div class="cat-tags">${subTags.map(t => `<span class="cat-tag">${t}</span>`).join('')}</div>
+      <div class="cat-items" id="kbItems-${key}">${itemsHTML}</div>`;
+
+    card.addEventListener('click', (e) => {
+      // Date group header toggle
+      const dgHeader = e.target.closest('.date-group-header');
+      if (dgHeader) {
+        e.stopPropagation();
+        const group = dgHeader.closest('.date-group');
+        const itemsEl = group.querySelector('.date-group-items');
+        const arrow = dgHeader.querySelector('.date-group-arrow');
+        if (itemsEl.style.display === 'none') {
+          itemsEl.style.display = 'block';
+          arrow.textContent = '▼';
+        } else {
+          itemsEl.style.display = 'none';
+          arrow.textContent = '▶';
+        }
+        return;
+      }
+      // Category card expand/collapse
+      if (!e.target.closest('a')) card.classList.toggle('expanded');
+    });
+    grid.appendChild(card);
+  });
+}
+
+/* ---- Search binding ---- */
+const kbSearchInput = document.getElementById('kbSearch');
+const kbSearchClear = document.getElementById('kbSearchClear');
+let kbSearchTimer;
+if (kbSearchInput) {
+  kbSearchInput.addEventListener('input', () => {
+    clearTimeout(kbSearchTimer);
+    kbSearchTimer = setTimeout(() => {
+      const val = kbSearchInput.value.trim();
+      kbSearchClear.classList.toggle('visible', !!val);
+      renderKnowledgeBase(val);
+    }, 200);
+  });
+  kbSearchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      kbSearchInput.value = '';
+      kbSearchClear.classList.remove('visible');
+      renderKnowledgeBase('');
+      kbSearchInput.blur();
+    }
+  });
+}
+if (kbSearchClear) {
+  kbSearchClear.addEventListener('click', () => {
+    kbSearchInput.value = '';
+    kbSearchClear.classList.remove('visible');
+    renderKnowledgeBase('');
+    kbSearchInput.focus();
+  });
+}
+
+/* ---- Dashboard ---- */
+let currentDateIdx = 0, currentDashTab = 'all';
+
+function renderDashboard() {
+  const dates = getSortedDates();
+  if (!dates.length) return;
+  currentDateIdx = Math.max(0, Math.min(currentDateIdx, dates.length-1));
+  const dateStr = dates[currentDateIdx], data = ALL_DATA[dateStr] || [];
+  document.getElementById('dashDate').textContent = dateStr;
+  document.getElementById('dashWeekday').textContent = getWeekday(dateStr);
+  document.getElementById('datePrev').disabled = currentDateIdx >= dates.length - 1;
+  document.getElementById('dateNext').disabled = currentDateIdx <= 0;
+  document.getElementById('dateDots').innerHTML = dates.map((d, i) =>
+    `<span class="date-dot ${i===currentDateIdx?'active':''} ${ALL_DATA[d]&&ALL_DATA[d].length?'has-data':''}"></span>`
+  ).join('');
+  const sources = new Set(data.map(i => i.s));
+  document.getElementById('dashTotal').textContent = data.length;
+  document.getElementById('dashSources').textContent = sources.size;
+  ['all',...CAT_ORDER].forEach(k => {
+    const el = document.getElementById('dcount-'+k);
+    if (el) el.textContent = k==='all' ? data.length : data.filter(i=>i.c===k).length;
+  });
+  ['all',...CAT_ORDER].forEach(cat => {
+    const container = document.getElementById('dtab-'+cat);
+    if (!container) return;
+    const list = cat==='all' ? data : data.filter(i=>i.c===cat);
+    if (!list.length) { container.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">该分类暂无情报</div></div>`; return; }
+    container.innerHTML = list.map(item => {
+      const ci = CAT_MAP[item.c] || { icon:'📋', tagCls:'tag-default' };
+      return `<div class="card">
+        <div class="card-header"><div>
+          <a href="${item.l}" target="_blank" rel="noopener" class="card-title">${item.t}</a>
+          <div class="card-source">${ci.icon} ${item.s} · ${item.d}</div>
+        </div></div>
+        <div class="card-desc">${item.desc}</div>
+        <div class="card-footer">
+          <div class="card-tags">${(item.tags||[]).map(t => `<span class="tag ${ci.tagCls}">${t}</span>`).join('')}</div>
+          <a href="${item.l}" target="_blank" rel="noopener" class="card-link-btn">🔗 阅读原文</a>
+        </div>
+      </div>`;
+    }).join('');
+  });
+  document.querySelectorAll('.dash-content').forEach(el => el.classList.remove('active'));
+  const tgt = document.getElementById('dtab-'+currentDashTab);
+  if (tgt) tgt.classList.add('active');
+}
+
+/* ---- Daily Report ---- */
+let currentDrIdx = 0;
+
+function renderDailyReport(dateStr) {
+  const drDates = Object.keys(DAILY_REPORT).sort().reverse();
+  currentDrIdx = drDates.indexOf(dateStr);
+  if (currentDrIdx === -1) currentDrIdx = 0;
+  const actualDate = drDates[currentDrIdx] || dateStr;
+  const data = DAILY_REPORT[actualDate];
+  document.getElementById('drDate').textContent = actualDate;
+  document.getElementById('drWeekday').textContent = getWeekday(actualDate);
+  document.getElementById('drPrev').disabled = currentDrIdx >= drDates.length - 1;
+  document.getElementById('drNext').disabled = currentDrIdx <= 0;
+  if (!data) {
+    document.getElementById('dr-content').innerHTML = '<div class="talk-empty"><div class="talk-empty-icon">📭</div><div class="talk-empty-text">暂无当日深度日报</div></div>';
+    return;
+  }
+  document.getElementById('dr-content').innerHTML = `<div class="dr-article">${data}</div>`;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+if (document.getElementById('drPrev')) {
+  document.getElementById('drPrev').addEventListener('click', () => {
+    const drDates = Object.keys(DAILY_REPORT).sort().reverse();
+    if (currentDrIdx < drDates.length - 1) {
+      currentDrIdx++;
+      renderDailyReport(drDates[currentDrIdx]);
+    }
+  });
+  document.getElementById('drNext').addEventListener('click', () => {
+    const drDates = Object.keys(DAILY_REPORT).sort().reverse();
+    if (currentDrIdx > 0) {
+      currentDrIdx--;
+      renderDailyReport(drDates[currentDrIdx]);
+    }
+  });
+}
+
+document.getElementById('datePrev').addEventListener('click', () => { const d=getSortedDates(); if(currentDateIdx<d.length-1){currentDateIdx++;renderDashboard();} });
+document.getElementById('dateNext').addEventListener('click', () => { if(currentDateIdx>0){currentDateIdx--;renderDashboard();} });
+document.querySelectorAll('.dash-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.dash-tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    currentDashTab = btn.dataset.dtab;
+    document.querySelectorAll('.dash-content').forEach(el=>el.classList.remove('active'));
+    const tgt = document.getElementById('dtab-'+currentDashTab);
+    if (tgt) tgt.classList.add('active');
+  });
+});
+
+/* ---- Today display ---- */
+const today = new Date();
+document.getElementById('todayDisplay').textContent =
+  today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+document.getElementById('weekdayDisplay').textContent = getWeekday(
+  today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0')
+);
+
+/* ---- Init ---- */
+document.addEventListener('DOMContentLoaded', () => {
+  renderKnowledgeBase('');
+  renderDashboard();
+  const drDates = Object.keys(DAILY_REPORT).sort().reverse();
+  renderDailyReport(drDates[0] || getSortedDates()[0]);
+});
+</script>
+</body>
+</html>
