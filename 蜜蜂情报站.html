@@ -475,6 +475,76 @@ body {
   .dr-article h1.dr-h1 { font-size: 22px; }
   .dr-article h2.dr-h2 { font-size: 18px; }
 }
+/* ── Sales Mode (销售心法) ── */
+.sales-section { margin-bottom: 28px; }
+.sales-section-header { display: flex; align-items: center; gap: 8px; font-size: 18px; font-weight: 700; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--accent-light); }
+.sales-insight-card {
+  background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+  border: 1px solid #93c5fd;
+  border-radius: 14px; padding: 20px 24px; margin-bottom: 16px;
+}
+.sales-insight-title { font-size: 18px; font-weight: 700; color: #1e40af; margin-bottom: 4px; }
+.sales-insight-source { font-size: 11px; color: #3b82f6; margin-bottom: 10px; }
+.sales-insight-body { font-size: 14px; color: #1e3a5f; line-height: 1.8; }
+.sales-insight-body strong { color: #1e40af; }
+.sales-insight-action { margin-top: 12px; padding: 12px 16px; background: rgba(255,255,255,0.7); border-radius: 8px; font-size: 14px; line-height: 1.7; border-left: 3px solid #3b82f6; }
+.sales-insight-action::before { content: "🎯 你今天就可以："; font-weight: 700; display: block; margin-bottom: 4px; color: #1e40af; }
+.sales-classics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.sales-classic-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px; cursor: pointer;
+  transition: all 0.25s; user-select: none;
+}
+.sales-classic-card:hover { border-color: var(--accent); box-shadow: 0 2px 12px rgba(79,70,229,0.08); }
+.sales-classic-card.expanded { border-color: var(--accent); background: #fafbff; }
+.sales-cc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.sales-cc-icon { font-size: 24px; }
+.sales-cc-name { font-size: 15px; font-weight: 700; }
+.sales-cc-quote { font-size: 12px; color: var(--text-secondary); font-style: italic; padding-left: 34px; margin-bottom: 6px; }
+.sales-cc-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; opacity: 0; margin-top: 0; }
+.sales-classic-card.expanded .sales-cc-body { max-height: 4000px; opacity: 1; margin-top: 10px; }
+.sales-cc-principle { padding: 8px 0; border-bottom: 1px solid var(--border); }
+.sales-cc-principle:last-child { border-bottom: none; }
+.sales-cc-p-title { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 2px; }
+.sales-cc-p-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+.sales-cc-p-example { font-size: 12px; color: #6b7280; margin-top: 4px; padding: 6px 10px; background: #f9fafb; border-radius: 6px; }
+.sales-cc-p-example::before { content: "💡 销售中的用法："; font-weight: 600; color: var(--accent); }
+.sales-scenarios { display: flex; gap: 4px; overflow-x: auto; margin-bottom: 12px; padding: 3px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; }
+.sales-scenario-tab {
+  padding: 7px 14px; font-size: 12px; font-weight: 600; white-space: nowrap;
+  background: transparent; border: none; border-radius: 8px;
+  color: var(--text-secondary); cursor: pointer; transition: all 0.2s;
+}
+.sales-scenario-tab:hover { color: var(--text); background: var(--bg); }
+.sales-scenario-tab.active { background: var(--accent); color: #fff; }
+.sales-tool-content { display: none; }
+.sales-tool-content.active { display: block; }
+.sales-tool-card {
+  background: var(--card-bg); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 18px; margin-bottom: 10px;
+  transition: all 0.15s;
+}
+.sales-tool-card:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(79,70,229,0.06); }
+.sales-tool-script { font-size: 14px; color: var(--text); line-height: 1.7; background: #f9fafb; padding: 10px 14px; border-radius: 8px; margin-bottom: 6px; border-left: 3px solid var(--accent); }
+.sales-tool-note { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+.sales-tool-label { font-size: 11px; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.sales-wisdom-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.sales-wisdom-card {
+  background: linear-gradient(135deg, #fef2f2 0%, #fff5f5 100%);
+  border: 1px solid #fecaca; border-radius: 12px;
+  padding: 16px 18px; transition: all 0.2s;
+}
+.sales-wisdom-card:hover { border-color: #f87171; box-shadow: 0 2px 12px rgba(239,68,68,0.08); }
+.sales-wisdom-title { font-size: 15px; font-weight: 700; color: #991b1b; margin-bottom: 6px; }
+.sales-wisdom-body { font-size: 13px; color: #7f1d1d; line-height: 1.7; }
+.sales-wisdom-body strong { color: #991b1b; }
+@media (max-width: 640px) {
+  .sales-classics-grid { grid-template-columns: 1fr; }
+  .sales-wisdom-grid { grid-template-columns: 1fr; }
+  .sales-scenarios { padding: 2px; }
+  .sales-scenario-tab { padding: 5px 10px; font-size: 11px; }
+  .sales-insight-card { padding: 14px 16px; }
+}
 </style>
 </head>
 <body>
@@ -498,6 +568,7 @@ body {
       <button class="mode-btn active" data-mode="knowledge">📚 知识库</button>
       <button class="mode-btn" data-mode="dashboard">📋 每日看板</button>
       <button class="mode-btn" data-mode="talk">📋 深度日报</button>
+      <button class="mode-btn" data-mode="sales">💬 销售心法</button>
     </nav>
   </div>
 </header>
@@ -582,6 +653,11 @@ body {
     <div style="text-align:center;margin-top:16px;font-size:12px;color:var(--text-light);">
       💡 深度日报基于当日采集情报综合撰写 · 帮助理解行业趋势与销售洞察
     </div>
+  </div>
+
+  <!-- ====== SALES MODE (销售心法) ====== -->
+  <div class="mode-content" id="mode-sales">
+    <div id="sales-content"></div>
   </div>
 
 </main>
@@ -1068,6 +1144,118 @@ const DAILY_REPORT = {
 <p class="dr-footnote">今日情报采集自：经济参考报、亿邦动力、淘天集团、腾讯新闻、东方财富、北京商报、观点网、中国新闻网、虎嗅、21世纪经济报道、东方证券、国金证券等15+来源。<br>明日干货继续。</p>`
 };
 
+/* ==========================================================
+   SALES — 销售心法数据
+   每次采集时顺带更新 todaysInsight
+   ========================================================== */
+const SALES_DATA = {
+  /* 今日销售启发 — 每天更新一条 */
+  todaysInsight: {
+    title: "白鸦的保底线哲学：AI不会替代销售，但会重新定义销售",
+    source: "白鸦 · 2026年7月专访 · 虎嗅/21世纪经济报道",
+    body: `<strong>在所有人说"AI替代销售"的时候，白鸦把有赞销售团队从1300人扩到3000人。</strong>他的原话特别实在："在中国，企业买一个2万块钱的东西，不用销售上门是不可能的。"<br><br>这句话背后是一个极深的认知：<strong>AI能替代的是"信息传递"，不能替代的是"信任建立"。</strong>你做销售本质上不是在卖功能——你是在帮客户判断"这个2万花得值不值"。判断需要信任，信任需要人。<br><br>他还分享了一个方法论框架：<strong>"什么积累都没有，什么客户责任都不用承担的人，可以天天喊革命。当你有大量的客户，你要为这些客户承担责任，你没有权力All in。尤其当你认为这个趋势是5~10年的时候，主动进化就够了。"</strong>`,
+    action: "跟客户聊到AI话题时，不用回避。你可以说：'你说得对，AI确实在改变很多事。但有赞创始人恰恰在所有人说AI干掉销售的时候扩招了3000人——因为他知道，2万块的东西没人上门跑，商家不会买。我今天是来帮你把这个2万块变成20万的。'"
+  },
+
+  /* 经典理论库——可展开的卡片 */
+  classics: [
+    {
+      id: "baiya",
+      name: "白鸦销售方法论",
+      icon: "🐦",
+      quote: "销售的职责是传递价值，而非把货卖出去",
+      principles: [
+        { title: "先洞察人，再设计货和场", desc: "做生意之前先想清楚：你的客户是谁？他为什么相信你？他的痛点和需求是什么？不要先想卖什么，先想卖给谁。", example: "跟电商客户聊，不要说'有赞能帮你做什么'。先说'刘总，我先了解下你现在的客户是谁？哪些客户最让你头疼？'" },
+        { title: "先想老客，再谈拉新", desc: "最忠诚的1%客户可能贡献35%的营收。复购率提升1%，利润可能增加10%。拉新的成本是维系老客的5-7倍。", example: "跟商家说：'你现在有500个老客户，每次群发能回来多少？我见过做得好的商家，复购率能做到60%，他们只是把精力从'怎么找新人'换成了'怎么让老客多买一次'。" },
+        { title: "前端SaaS有护城河，后端软件会被打碎", desc: "衡量你的SaaS是否安全的标准：你是在记录客户的业务流程（危险），还是参与客户的业务运转（安全）？", example: "客户质疑SaaS被AI替代时：'你说得对，记库存的软件确实会被替代。但有赞管的是你每天都在做的生意——上什么品、定什么价、推什么活动——这些AI不知道，但有赞知道。'"},
+        { title: "30-30-40收入模型", desc: "未来3-4年有赞收入结构：30%传统SaaS + 30%增值服务 + 40%纯AI收入。AI收入必须是Token消耗、算力费、数字员工直接付费才算。", example: "讲给客户：'你现在花2万买系统，这是30%。未来你花的可能是数字员工的钱——一个月几百块，帮你干活。花钱的部门变成帮你赚钱的部门。'" }
+      ]
+    },
+    {
+      id: "influence",
+      name: "《影响力》六原则",
+      icon: "📖",
+      quote: "西奥迪尼 · 影响他人的6把钥匙，每一把都可以用在销售中",
+      principles: [
+        { title: "互惠 Reciprocity", desc: "人有一种天然倾向——你给了我什么，我就想回报你什么。先给价值，再谈交易。", example: "给客户发行业数据报告 → 再加一句'我觉得这个对你有用' → 客户欠你一份人情。下次打电话他不好意思直接挂。" },
+        { title: "承诺一致 Consistency", desc: "一旦人做出了一个承诺（即使是小承诺），就会倾向于保持言行一致。", example: "面访时先让客户说'我也想提升复购率' → 后面让他说'那你就试试用系统来管'就容易多了——因为他在和自己的承诺保持一致。" },
+        { title: "社会认同 Social Proof", desc: "人在不确定的时候，会看别人怎么做。同行案例是最好的说服力。", example: "'王总，跟你同品类的XX品牌在用有赞之后，6个月复购率提升了28%。你要不要看看他们怎么做的？'" },
+        { title: "喜好 Liking", desc: "人更容易被自己喜欢的人说服。找到共同点、真诚赞美、多听少说。", example: "打电话前先看看客户朋友圈：发了什么？有啥爱好？开场从'你也喜欢这个？'开始，比'我是有赞的'效果好10倍。" },
+        { title: "权威 Authority", desc: "人在专业人士面前会减少反驳。展示你的行业认知和专业度。", example: "用蜜蜂情报站的数据说话：'上个月Prime Day的数据显示，AI转化率提升了50.7%。你做的品类，我可以帮你看看怎么用AI做到同样的效果。' —— 你不是在卖系统，你是在提供专业判断。" },
+        { title: "稀缺 Scarcity", desc: "当某样东西稀缺时，人会更想要。限时、限量、专属机会。", example: "'这个AI数字员工的功能目前还在内测阶段，我这个月还剩2个名额可以帮你申请。下个月就要正式收费了。'" }
+      ]
+    },
+    {
+      id: "spin",
+      name: "SPIN销售法",
+      icon: "🎯",
+      quote: "大客户销售的提问框架——问对问题，客户自己说服自己",
+      principles: [
+        { title: "S — 情境问题 Situation", desc: "了解客户的现状和背景。不要假设你知道客户的情况。", example: "'王总，你现在的客户管理系统是怎么运作的？' '老客户主要靠什么渠道触达？' '你现在对AI营销有什么了解？'" },
+        { title: "P — 难点问题 Problem", desc: "帮客户发现他的问题和不满。这是关键——客户感受到痛了才会想改变。", example: "'你现在的老客户，离店之后你还联系得上吗？' '有多少客户买了第一次就再也没有回来？' '你知不知道每个月流失的客户值多少钱？'" },
+        { title: "I — 暗示问题 Implication", desc: "不解决问题会怎样。把痛点放大，让客户自己意识到不处理的代价。", example: "'如果这些流失的客户你都不知道是谁，他们去了哪里你也不知道——意味着你每月都在给竞争对手送客户。一年下来，你损失的可能是一个全职员工的钱。'" },
+        { title: "N — 需求 payoff 问题 Need-payoff", desc: "引导客户说出解决方案的价值，而不是你告诉他。", example: "'如果有一个系统能帮你自动识别哪些客户快流失了、谁该复购了，你觉得对你有帮助吗？' '如果能把老客复购率提升10%，一年能多赚多少？'" }
+      ]
+    }
+  ],
+
+  /* 实战工具箱 —— 按场景分类 */
+  toolbox: [
+    {
+      id: "opening",
+      name: "电话开场白",
+      icon: "📞",
+      cards: [
+        { script: "李总你好，我是做电商系统的小张。我注意到你店铺在XX品类做得不错，特别是有XX款卖得挺好。我今天不是来推销的——我最近在研究你们这个品类，发现几个有意思的数据，想跟你分享3分钟，方便吗？", note: "先做功课再打电话。说明你认识他的生意（他不好意思拒绝），给价值（分享数据）而不是直接推销。" },
+        { script: "王总，我刚看到一个跟你品类相关的数据——淘天上个月刚上线了AI购物，消费者说句话就能买东西了。我在想这个对你店铺会有什么影响，想跟你聊聊。3分钟够吗？", note: "用行业新闻开场。你表现出的是'关注他行业'而不是'想卖他东西'。" },
+        { script: "张总，我是之前加过你微信的小张。我这边整理了一份今年电商退货率的行业数据——服装类退货率普遍到70%了。我想跟你分享一下，看对你有没有参考价值。", note: "用已有联系做铺垫，用数据引起好奇。别在开场就问'考不考虑有赞'——先建立价值感。" }
+      ]
+    },
+    {
+      id: "objection",
+      name: "异议弹药库",
+      icon: "🛡️",
+      cards: [
+        { script: "客户说 '太贵了'\n\n回复：王总，你觉得贵很正常。我换个角度跟你说——你现在每个月的流量成本是多少？如果用有赞，你的老客户复购率能提升10%，就相当于你每个月多了一笔不用花钱买流量的收入。系统不是成本，是帮你省广告费的工具。", note: "不要辩解价格，要帮客户算账。把价格翻译成'少花的钱'或'多赚的钱'。" },
+        { script: "客户说 '我们暂时不需要'\n\n回复：明白，可能你现在确实挺忙的。我只是觉得这个机会有点可惜——你同品类的XX品牌已经开始用了，6个月复购率提升了28%。我换个时间再打给你，到时候我整理一份你们品类的同行数据给你看。", note: "不要追问'为什么不需要'。尊重他的判断，但留下一个钩子（同行案例+下次带数据）。" },
+        { script: "客户说 '我们已经有用其他系统了'\n\n回复：没关系，用过了才知道什么好用。我想了解的是——你们现在用的系统，在客户复购和私域运营上，解决了哪些问题、还有哪些没解决的？有赞在这块有一些不一样的做法，可以给你参考。", note: "不要攻击竞品。先承认'用过了才知道'，然后把话题引导到'还有什么没解决的'——那才是你的机会。" },
+        { script: "客户说 '有赞不就是个微商城吗？'\n\n回复：以前可能确实是。但现在的有赞是'把生意装进系统'——从商品上架到库存管理、从营销活动到客户复购、从数据看板到AI数字员工，是一整套经营系统。微商城只是冰山一角。", note: "客户对产品印象可能过时了。不要生气，温和地纠正——'以前是，但现在已经是XX了'。" }
+      ]
+    },
+    {
+      id: "deep",
+      name: "深度面访",
+      icon: "👥",
+      cards: [
+        { script: "【开场破冰】\n'张总，感谢你抽出时间。我今天来主要不是介绍产品的——我想先了解一下你的生意情况，再看看有没有什么地方是我能帮上忙的。'" , note: "不要一坐下就开始演示系统。先聊生意。" },
+        { script: "【诊断问题】\n'你现在每个月新客户大概多少？老客户回头率怎么样？'\n'你的客户离店之后，你还能联系得上他们吗？'\n'你统计过一个月流失多少客户吗？大概值多少钱？'", note: "用SPIN框架提问。先了解现状（S），再发现痛点（P）。" },
+        { script: "【展示价值】\n'你刚才说的这个问题，其实很多同行都遇到过。我这边有一个案例——XX品牌也是做你们这个品类的，它们用了一套系统把老客复购率从15%提到了38%。你想看看他们怎么做的吗？'", note: "用同行案例说话。展示社会认同。" },
+        { script: "【收尾推进】\n'今天聊下来，我觉得对你最有价值的是两个方向：一是把流失的客户找回来，二是让新客户变成老客户。我回去帮你整理一份方案，下周二发给你？'\n'下次我来的时候，可以直接给你演示一下XX品牌是怎么操作的。'", note: "每次面访要有明确的下一步。不要留'我回去想想'的模糊空间。" }
+      ]
+    },
+    {
+      id: "closing",
+      name: "逼单技巧",
+      icon: "🎬",
+      cards: [
+        { script: "'王总，我们这个方案的价格有效期到下周五。原因不是催你——是AI数字员工模块下个月就要正式上线收费了，目前还是内测价。'", note: "稀缺性原则。给一个真实的截止理由。" },
+        { script: "'张总，你刚才也说了，复购率提升对你的生意有帮助。如果不做，你的竞争对手做了，对你意味着什么？'", note: "让客户自己说'我应该做'。他亲口说出的承诺一致性最强。" },
+        { script: "'李总，要不这样——我们先签一个月的试用合同。一个月后你觉得没效果，随时退，我亲自帮你办手续。有赞对产品有这个信心。'", note: "降低决策风险。敢退的产品才是好产品。" }
+      ]
+    }
+  ],
+
+  /* 人情世故 */
+  wisdom: [
+    { title: "关系核心：你心里有没有我", body: "<strong>人与人之间的关系，说到底就是一句话：你心里有没有我。</strong>客户为什么选择跟你买？不是因为你的产品比别人的好多少——是因为他感觉到你心里有他。你记得他上次聊过的事、你在他生日发了条消息、你在他遇到困难时主动出现。这些小事比任何产品功能都管用。<br><br><strong>销售的底层逻辑不是'卖东西'，是'建立关系'。</strong>关系的本质是让对方觉得'你心里有他'——他才会'他心里有你'。" },
+    { title: "雪中送炭 vs 锦上添花", body: "<strong>锦上添花的事人人都会做，雪中送炭的人屈指可数。</strong>客户生意好的时候，你去推销，他是锦上添花——他记不住你。客户生意遇到困难的时候，你带了一个有用的信息、一个可能的思路过去——他是雪中送炭——他记住你一辈子。<br><br><strong>关键动作：</strong>定期关注客户的行业动态。你的客户生意难做了？行业的政策变了？看到一个对他有用的数据？马上发给他。不用提产品，就发信息。这条信息本身就是你在他心里的存款。" },
+    { title: "利益分配：多给别人一份", body: "<strong>任何一段关系中，只要涉及利益，最危险的信号就是'我拿多了'。</strong>哪怕是你应得的，如果你让合作方觉得你拿多了，这段关系就出现了裂痕。永远给合作方多留一份——不是因为你不值钱，而是因为'每次合作我都多赚了一点'这个感觉，会让他主动找你合作。<br><br><strong>在销售中：</strong>帮客户争取额外服务、帮客户多申请一个功能、帮客户多要一个优惠——这些'不是你应该做的'事，才是客户记住你的真正原因。" },
+    { title: "想赢的人先输", body: "<strong>在争论中想赢的人，往往在关系中先输。</strong>客户说了一句你不认同的话——你纠正他，你赢了辩论，他赢了面子，关系输了。客户拒绝了你——你追问'为什么'，他给了你理由，你输了这一次，但他下次不敢接你电话了。<br><br><strong>正确的做法：先接受，再引导。</strong>'你说得有道理，我之前也是这么想的。不过后来我发现……' 先用'你说得对'卸掉对方的防御，你的东西才能进得去。这不是软弱——是策略。" },
+    { title: "倾听是最被低估的销售技能", body: "<strong>大部分销售在客户说话的时候，脑子里想的是'我接下来要说什么'。</strong>真正的高手在想的是'他刚才说了什么'。客户的一句话里藏着大量信息——他的痛点、他的判断标准、他的决策逻辑、他的预算范围。<br><br><strong>练习方法：</strong>下一次打电话，试试这个规则——客户说完之后你数3秒再开口。这3秒里你不知道说什么没关系，沉默也是一种力量。客户通常会在这3秒里说出他真正想说的话。而你说的越多，你越听不懂客户。" },
+    { title: "持续出现在客户面前", body: "<strong>做销售最大的误解是：客户不买是因为产品不好。实际上，客户不买很多时候只是因为——他忘了你。</strong>你打了第一通电话，他说'考虑考虑'——你当真了，等了他两个月。两个月后他买了你竞争对手的——不是因为你产品差，是因为对方每周给他发一条有用的信息，持续了两个月。<br><br><strong>不打扰，但持续出现：</strong>看到跟客户行业相关的新闻→转发。看到客户发了朋友圈→点赞+有内容的评论。逢年过节群发的祝福不如一句'最近你那品类有个变化你注意到了吗？'专业洞察比祝福更容易打开对话框。" }
+  ]
+};
+
 const CAT_MAP = {
   ecommerce: { label:"电商行业", icon:"📦", tagCls:"tag-ecommerce", bgCls:"cat-icon-bg-ecommerce", desc:"平台动态、品类趋势、商家生态、运营打法" },
   retail:    { label:"实体行业", icon:"🏪", tagCls:"tag-retail",    bgCls:"cat-icon-bg-retail",    desc:"零售连锁、餐饮、美业、本地生活、消费品牌" },
@@ -1347,12 +1535,119 @@ document.getElementById('weekdayDisplay').textContent = getWeekday(
   today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0')
 );
 
+/* ---- Sales Mode (销售心法) ---- */
+function renderSales() {
+  const data = SALES_DATA;
+  const container = document.getElementById('sales-content');
+  if (!container) return;
+
+  // Build today's insight
+  const insightHTML = data.todaysInsight ? `
+    <div class="sales-section">
+      <div class="sales-section-header">📌 今日销售启发</div>
+      <div class="sales-insight-card">
+        <div class="sales-insight-title">${data.todaysInsight.title}</div>
+        <div class="sales-insight-source">${data.todaysInsight.source}</div>
+        <div class="sales-insight-body">${data.todaysInsight.body}</div>
+        <div class="sales-insight-action">${data.todaysInsight.action}</div>
+      </div>
+    </div>` : '';
+
+  // Build classics library
+  const classicsHTML = `
+    <div class="sales-section">
+      <div class="sales-section-header">📚 经典理论库</div>
+      <div class="sales-classics-grid" id="salesClassics">
+        ${data.classics.map(c => `
+          <div class="sales-classic-card" data-classic="${c.id}">
+            <div class="sales-cc-header">
+              <span class="sales-cc-icon">${c.icon}</span>
+              <span class="sales-cc-name">${c.name}</span>
+            </div>
+            <div class="sales-cc-quote">"${c.quote}"</div>
+            <div class="sales-cc-body">
+              ${c.principles.map(p => `
+                <div class="sales-cc-principle">
+                  <div class="sales-cc-p-title">${p.title}</div>
+                  <div class="sales-cc-p-desc">${p.desc}</div>
+                  <div class="sales-cc-p-example">${p.example}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+
+  // Build toolbox
+  const toolboxHTML = `
+    <div class="sales-section">
+      <div class="sales-section-header">🛠️ 实战工具箱</div>
+      <div class="sales-scenarios" id="salesScenarios">
+        ${data.toolbox.map((t, i) => `
+          <button class="sales-scenario-tab ${i===0?'active':''}" data-stab="${t.id}">${t.icon} ${t.name}</button>
+        `).join('')}
+      </div>
+      ${data.toolbox.map((t, i) => `
+        <div class="sales-tool-content ${i===0?'active':''}" id="stab-${t.id}">
+          ${t.cards.map(c => `
+            <div class="sales-tool-card">
+              <div class="sales-tool-label">${c.note.trim().length > 50 ? '用前须知' : '适用场景'}</div>
+              <div class="sales-tool-script">${c.script.replace(/\n/g, '<br>')}</div>
+              <div class="sales-tool-note">💡 ${c.note}</div>
+            </div>
+          `).join('')}
+        </div>
+      `).join('')}
+    </div>`;
+
+  // Build human wisdom
+  const wisdomHTML = `
+    <div class="sales-section">
+      <div class="sales-section-header">🧠 人情世故</div>
+      <div class="sales-wisdom-grid">
+        ${data.wisdom.map(w => `
+          <div class="sales-wisdom-card">
+            <div class="sales-wisdom-title">${w.title}</div>
+            <div class="sales-wisdom-body">${w.body}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+
+  container.innerHTML = insightHTML + classicsHTML + toolboxHTML + wisdomHTML;
+}
+
+/* ---- Sales event listeners (call after renderSales) ---- */
+function initSalesEvents() {
+  // Classic card expand/collapse
+  document.querySelectorAll('.sales-classic-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('a')) return;
+      card.classList.toggle('expanded');
+    });
+  });
+
+  // Toolbox scenario tabs
+  document.querySelectorAll('.sales-scenario-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sales-scenario-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.sales-tool-content').forEach(el => el.classList.remove('active'));
+      const tgt = document.getElementById('stab-' + btn.dataset.stab);
+      if (tgt) tgt.classList.add('active');
+    });
+  });
+}
+
 /* ---- Init ---- */
 document.addEventListener('DOMContentLoaded', () => {
   renderKnowledgeBase('');
   renderDashboard();
   const drDates = Object.keys(DAILY_REPORT).sort().reverse();
   renderDailyReport(drDates[0] || getSortedDates()[0]);
+  renderSales();
+  initSalesEvents();
 });
 </script>
 </body>
