@@ -738,5 +738,125 @@
     "desc": "行业研报显示AI算力需求延续高增：截至7月19日当周，OpenRouter全平台Token调用量同比增2645.73%，国内大模型Token调用量同比增5447.82%。半导体销售保持高增速。消费级AI眼镜与3D打印新品频出，三星联合GentleMonster发布首款AI眼镜，3D打印设备出口同比增90.1%。",
     "link": "https://stock.finance.sina.com.cn/stock/go.php/vReport_Show/kind/lastest/rptid/836856550660/index.phtml",
     "tags": ["AI算力", "Token调用量", "半导体", "AI眼镜"]
+  },
+  {
+    "id": 75,
+    "category": "ai",
+    "title": "Nile正式上线：面向Agent时代的AI原生电商分发平台，已获数千万元Pre-seed融资",
+    "source": "极客公园 / 虎嗅 / 淘宝官方学习中心",
+    "date": "2026-07-29",
+    "desc": "21岁创始人戴灏庄创立的Nile于7月正式上线，定位面向Agent时代的AI原生电商基建平台。为商家重建面向Agent的商品系统（信息量提升300倍）、销售归因和客户关系。品牌可在10分钟内完成接入，转化率相比站内提升150%-300%，已服务超500家客户。",
+    "link": "https://www.geekpark.net/news/368078",
+    "tags": ["Nile", "AI电商", "Agent基建", "A2A"]
+  },
+  {
+    "id": 76,
+    "category": "ecommerce",
+    "title": "京东2026上半年时尚新商家销售翻倍，服饰美妆成新商增长核心渠道",
+    "source": "新华财经",
+    "date": "2026-07-28",
+    "desc": "京东发布上半年时尚品类商家增长数据：新入驻时尚商家销售额同比翻倍，服饰美妆成为新商增长核心渠道。京东持续降低时尚品类入驻门槛，推动产业带品牌上行，AI选品和AI营销工具帮助新商家快速冷启动。",
+    "link": "https://www.cnfin.com/cmjj-lb/detail/20260728/4447312_1.html",
+    "tags": ["京东", "时尚品类", "新商家增长", "服饰美妆"]
+  },
+  {
+    "id": 77,
+    "category": "ecommerce",
+    "title": "央视曝光电商半年报：AI大模型遭恶意\"投毒\"，黑产利用GEO操控AI输出虚假信息",
+    "source": "网经社 / 央视",
+    "date": "2026-07-28",
+    "desc": "央视曝光电商行业乱象半年报：不法分子利用GEO（生成式引擎优化）技术操控AI大模型输出虚假商品信息，AI\"造黄\"黑色产业链批量生成色情擦边内容，直播赌石诈骗、网购家具检测报告造假等问题突出。AI大模型安全治理成为监管重点。",
+    "link": "http://www.100ec.cn/detail--6662001.html",
+    "tags": ["电商乱象", "AI黑产", "GEO", "监管"]
+  },
+  {
+    "id": 78,
+    "category": "ecommerce",
+    "title": "各大平台认证门槛全面收紧：淘宝/抖音/京东对个人开发者限制调用订单接口",
+    "source": "阿里云开发者社区 / 网经社",
+    "date": "2026-07-28",
+    "desc": "2026年各电商平台认证门槛大幅收紧：淘宝个人开发者无法调用订单详情接口；抖音不接受个人主体；京东JOS必须企业实名；拼多多订单接口需商家Token。个人开发者的开放权限已被大幅压缩，ISV服务商需缴纳保证金10-15万元不等。",
+    "link": "https://developer.aliyun.com/article/1751134",
+    "tags": ["平台认证", "开发者门槛", "ISV", "合规"]
+  },
+  {
+    "id": 79,
+    "category": "retail",
+    "title": "义乌全球数贸中心：商户批量接入AI数字化工具，从\"坐商\"全面向\"云商\"转型",
+    "source": "央广网 / 新浪新闻",
+    "date": "2026-07-28",
+    "desc": "义乌全球数贸中心作为第六代市场，商户正批量接入AI数字化工具：AI辅助新品研发、AI多语种翻译一键切换36种语言与全球客商沟通、商贸大模型赋能从坐商到云商转型。AI眼镜、外骨骼机器人等前沿产品也通过义乌加速出海。",
+    "link": "https://news.sina.com.cn/zx/gj/2026-07-28/doc-inikkhkf1948425.shtml",
+    "tags": ["义乌", "AI工具", "云商转型", "出海"]
+  },
+  {
+    "id": 80,
+    "category": "ai",
+    "title": "Kimi K3开源模型发布：2.8万亿参数全球最大，编程盲测登顶全球第一",
+    "source": "36氪 / 上海证券报 / 新华网",
+    "date": "2026-07-17",
+    "desc": "月之暗面发布Kimi K3开源模型，参数规模2.8万亿为全球最大开源模型。在Frontend Code Arena编程盲测中以1679分登顶全球第一，超Claude Fable 5和GPT-5.6 Sol。发布后72小时美股AI板块蒸发4700亿美元。",
+    "link": "https://m.cnstock.com/commonDetail/746430",
+    "tags": ["Kimi K3", "2.8万亿", "开源模型", "编程登顶"]
+  },
+  {
+    "id": 81,
+    "category": "ai",
+    "title": "DeepSeek V4正式上线：1.6万亿参数，推理成本仅为Opus模型七分之一",
+    "source": "新华网 / WAIC",
+    "date": "2026-07-19",
+    "desc": "DeepSeek在WAIC2026期间正式发布V4大模型，总参数1.6万亿（激活490亿），推理计算量仅为前代的27%，API价格约为Opus级模型的七分之一，主打极致性价比。国产模型从追赶到性价比领先。",
+    "link": "https://www.news.cn/20260720/6fe086eee95c401ab494b8e8fa7a0f98/c.html",
+    "tags": ["DeepSeek V4", "性价比", "国产大模型", "WAIC"]
+  },
+  {
+    "id": 82,
+    "category": "ai",
+    "title": "Firmable推出MCP服务器：打通AI工具与CRM数据，B2B销售迎来AI原生数据层",
+    "source": "Utusan / 外电",
+    "date": "2026-07-29",
+    "desc": "AI原生B2B销售平台Firmable发布MCP（Model Context Protocol）服务器，使销售团队能从Claude、ChatGPT等AI工具中直接调用经过验证的企业和联系人数据。新增CRM Push Prep等540+预置技能，可预览写入Salesforce/HubSpot并防重复。",
+    "link": "https://www.utusan.com.my/nasional/2026/07/firmable-launches-mcp",
+    "tags": ["Firmable", "MCP服务器", "B2B销售", "AI数据层"]
+  },
+  {
+    "id": 83,
+    "category": "ai",
+    "title": "Adobe Commerce新增Catalog Agent：产品目录结构化后直接接入ChatGPT/Claude等AI平台",
+    "source": "IT Brief / 外电",
+    "date": "2026-07-28",
+    "desc": "Adobe为Commerce平台新增Catalog Agent功能，将商户产品目录信息转化为机器可读的结构化数据层，供ChatGPT、Gemini、Claude等AI平台直接使用。2026年4-6月AI源至零售网站流量同比增125%。",
+    "link": "https://itbrief.co.uk/story/adobe-adds-ai-discovery-tools-to-commerce-catalogue",
+    "tags": ["Adobe", "Catalog Agent", "产品目录", "AI流量"]
+  },
+  {
+    "id": 84,
+    "category": "business",
+    "title": "Geene 2.0即将正式商用：AI应用从\"流量经济\"向\"Token经济\"全面跃迁",
+    "source": "搜狐 / 狮腾控股",
+    "date": "2026-07-28",
+    "desc": "狮腾控股宣布Geene 2.0将于8月8日起正式商用。行业分析认为Geene的升级标志着AI应用从流量经济向Token经济的全面跃迁。企业级SaaS从按席位订阅转向混合模式（席位+按用量/效果付费）。",
+    "link": "https://www.sohu.com/a/1055676014_122014422",
+    "tags": ["Geene 2.0", "Token经济", "AI商业化", "SaaS"]
+  },
+  {
+    "id": 85,
+    "category": "data",
+    "title": "GreenCore发布CPG知识图谱v3.2.0：AI代理月交易950万+，B2B采购加速AI代理化",
+    "source": "Manila Times / 外电",
+    "date": "2026-07-29",
+    "desc": "GreenCore Solutions发布CPG知识图谱v3.2.0，覆盖15,688个零售杂货品牌，含20亿数据点。每月处理超950万次AI代理交易，占全球杂货代理采购流量15-20%。Gartner预测到2028年90%B2B采购将经由AI代理中介完成。",
+    "link": "https://www.manilatimes.net/2026/07/29/tmt-newswire/pr-newswire/greencore-solutions-corp-gsc-ships-cpg-knowledge-graph-v320-ai-agents-at-95-million-monthly-transactions/2393605",
+    "tags": ["GreenCore", "AI代理交易", "B2B采购", "知识图谱"]
+  },
+  {
+    "id": 86,
+    "category": "data",
+    "title": "AI+人形机器人规模化商用突破：全年整机产量有望突破10万台，工业采购同比增2.3倍",
+    "source": "新华网 / WAIC",
+    "date": "2026-07-20",
+    "desc": "WAIC 2026数据显示具身智能进入规模化商用拐点：1-5月我国工业企业购进具身智能机器人总金额同比增长2.3倍，全年人形机器人整机产量有望突破10万台。擎朗智能、智元机器人已在酒店、汽车工厂规模化部署。600亿元国家AI产业投资基金加快运营。",
+    "link": "https://www.news.cn/20260720/6fe086eee95c401ab494b8e8fa7a0f98/c.html",
+    "tags": ["人形机器人", "具身智能", "10万台", "AI产业基金"]
   }
 ]
